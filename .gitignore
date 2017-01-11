@@ -1,0 +1,12 @@
+*.csproj
+*.pidb
+*.sln
+.DS_Store
+Library/*
+Publish/*
+Temp/*
+Screenshots/*
+*.userprefs
+*.unityproj
+*.sublime-project
+*.sublime-workspace
