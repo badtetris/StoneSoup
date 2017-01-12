@@ -35,6 +35,9 @@ public class Tile : MonoBehaviour {
 
 	protected Rigidbody2D _body;
 	protected SpriteRenderer _sprite;
+	public SpriteRenderer sprite {
+		get { return _sprite; }
+	}
 	protected Animator _anim;
 
 	protected void moveViaVelocity(Vector2 direction, float speed, float acceleration) {
@@ -45,6 +48,9 @@ public class Tile : MonoBehaviour {
 		}
 	}
 
+	protected void removeTag(TileTags tagsToRemove) {
+		tags = tags & ~(tagsToRemove);
+	}
 
 	public virtual void init() {
 		_sprite = GetComponent<SpriteRenderer>();
@@ -55,6 +61,23 @@ public class Tile : MonoBehaviour {
 		else {
 			_body = GetComponent<Rigidbody2D>();
 		}
+	}
+
+	public virtual void pickUp(Tile tilePickingUsUp) {
+		if (!hasTag(TileTags.CanBeHeld)) {
+			return;
+		}
+		if (_body != null) {
+			_body.bodyType = RigidbodyType2D.Kinematic;
+		}
+		transform.parent = tilePickingUsUp.transform;
+		transform.localPosition = new Vector3(0.2f, -0.1f, -0.1f);
+		removeTag(TileTags.CanBeHeld);
+
+	}
+
+	public virtual void useAsItem(Tile tileUsingUs) {
+
 	}
 
 	public static Vector2 toGridCoord(float x, float y) {
@@ -75,7 +98,6 @@ public class Tile : MonoBehaviour {
 		tile.init();
 		return tile;
 	}
-
 
 }
 

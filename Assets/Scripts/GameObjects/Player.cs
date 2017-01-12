@@ -9,6 +9,18 @@ public class Player : Tile {
 
 	protected int _walkDirection = 2;
 
+	// Like the GameManager, there should always only be one player, globally accessible
+	protected static Player _instance = null;
+	public static Player instance {
+		get { return _instance; }
+	}
+	void Awake() {
+		_instance = this;
+	}
+	void OnDestroy() {
+		_instance = null;
+	}
+
 	void FixedUpdate() {
 		// Let's move via the keyboard controls
 
@@ -59,7 +71,23 @@ public class Player : Tile {
 
 	void Update() {
 		if (Input.GetKeyDown(KeyCode.Space)) {
-			_body.AddForce(Vector2.up*15000f);
+			// Check to see if we're on top of an item that can be held
+			RaycastHit2D[] maybeResults = new RaycastHit2D[10];
+			int numObjectsFound = _body.Cast(Vector2.zero, maybeResults);
+			Debug.Log(numObjectsFound);
+			for (int i = 0; i < numObjectsFound && i < maybeResults.Length; i++) {
+				RaycastHit2D result = maybeResults[i];
+				if (result.transform.gameObject.tag != "Tile") {
+					continue;
+				}
+				Tile tileHit = result.transform.GetComponent<Tile>();
+
+				if (tileHit.hasTag(TileTags.CanBeHeld)) {
+					Debug.Log("Found a thing to pick up" + tileHit);
+					tileHit.pickUp(this);
+				}
+
+			}
 		}
 	}
 

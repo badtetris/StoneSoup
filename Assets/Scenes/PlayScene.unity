@@ -104,6 +104,7 @@ GameObject:
   - component: {fileID: 694949242}
   - component: {fileID: 694949241}
   - component: {fileID: 694949246}
+  - component: {fileID: 694949247}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -192,6 +193,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scaleOneScreenWidth: 320
   scaleOneScreenHeight: 180
+--- !u!114 &694949247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 694949240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 882249f4bb4e4453ca7af4e81bd6482d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraFollowSpeed: 10
 --- !u!1 &734297266
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,6 +215,7 @@ GameObject:
   - component: {fileID: 734297267}
   - component: {fileID: 734297269}
   - component: {fileID: 734297268}
+  - component: {fileID: 734297270}
   m_Layer: 5
   m_Name: author_text
   m_TagString: Untagged
@@ -224,8 +238,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 9.400391}
-  m_SizeDelta: {x: 157.4, y: 14.8}
+  m_AnchoredPosition: {x: 0, y: 10}
+  m_SizeDelta: {x: 157.4, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &734297268
 MonoBehaviour:
@@ -253,7 +267,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 8
     m_MaxSize: 40
-    m_Alignment: 7
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -266,6 +280,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 734297266}
+--- !u!114 &734297270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 734297266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ef58d1617a514735a03741f266dfcd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1705594155
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,8 +321,12 @@ MonoBehaviour:
   generalTilePrefabs:
   - {fileID: 1249101369981090, guid: ad909242602e14ab893ee3381803cc01, type: 2}
   - {fileID: 1113547423427548, guid: 15584a55359f544b8aed48a2de6be57a, type: 2}
+  - {fileID: 1387771116485768, guid: e4d00d2fcd2614042856187fc264cd0d, type: 2}
   levelGenerator: {fileID: 114918456137113632, guid: d0342a0d2c2bf4c9e989336140a9aa86,
     type: 2}
+  currentRoomPosition: {x: 0, y: 0}
+  currentRoomAuthor: Student A
+  worldBoundaries: {x: 0, y: 0, z: 0, w: 0}
 --- !u!4 &1705594157
 Transform:
   m_ObjectHideFlags: 0
