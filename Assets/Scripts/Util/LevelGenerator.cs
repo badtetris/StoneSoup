@@ -86,6 +86,7 @@ public class LevelGenerator : MonoBehaviour {
 		// Finally, set up the boundaries on the manager so the camera knows how to follow.
 		GameManager.instance.currentRoomPosition.x = width*Tile.TILE_SIZE/2f;
 		GameManager.instance.currentRoomPosition.y = height*Tile.TILE_SIZE/2f;
+		GameManager.instance.currentRoomObj = GameManager.instance.gameObject;
 		GameManager.instance.currentRoomAuthor = "AP Thomson";
 
 	}

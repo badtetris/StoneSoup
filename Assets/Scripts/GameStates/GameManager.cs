@@ -44,6 +44,9 @@ public class GameManager : MonoBehaviour {
 	public Vector2 currentRoomPosition; // The center position of the current room.
 
 	[HideInInspector]
+	public GameObject currentRoomObj; // Used primarily by single room mode to ensure there's only one room on at a time.
+
+	[HideInInspector]
 	public string currentRoomAuthor = "Student A";
 
 	// The min/max of the entire world (for the purposes of the camera follow)

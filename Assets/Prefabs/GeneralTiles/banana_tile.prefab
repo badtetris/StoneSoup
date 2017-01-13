@@ -22,9 +22,9 @@ GameObject:
   - component: {fileID: 212227872059390898}
   - component: {fileID: 61055079345250784}
   - component: {fileID: 50444360552277544}
-  - component: {fileID: 114813484714530944}
+  - component: {fileID: 114752125726514824}
   m_Layer: 0
-  m_Name: small_rock
+  m_Name: banana_tile
   m_TagString: Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,7 +55,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 2.3
+  m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
@@ -71,13 +71,13 @@ BoxCollider2D:
   m_GameObject: {fileID: 1387771116485768}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: 8bf99e611298d4c74bc559b22099de99, type: 2}
+  m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.6, y: 0.6}
---- !u!114 &114813484714530944
+--- !u!114 &114752125726514824
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -85,14 +85,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1387771116485768}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ef172f95b568425d9921af396b8db03, type: 3}
+  m_Script: {fileID: 11500000, guid: df8383d5072aa4580900ddfbd2e7199b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tags: 2
   tileWereHolding: {fileID: 0}
-  throwForce: 3000
-  onGroundThreshold: 0.8
-  afterThrowTime: 0.2
 --- !u!212 &212227872059390898
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -124,7 +121,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 3ed46153227ca43eab3ecbc2d8792221, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 66efb97d9cbdf4888ac603659069a1d0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

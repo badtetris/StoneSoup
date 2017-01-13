@@ -9,6 +9,9 @@ public class Player : Tile {
 
 	protected int _walkDirection = 2;
 
+	protected Tile _lastTileWeHeld = null;
+
+
 	// Like the GameManager, there should always only be one player, globally accessible
 	protected static Player _instance = null;
 	public static Player instance {
@@ -71,6 +74,15 @@ public class Player : Tile {
 
 	void Update() {
 		if (Input.GetKeyDown(KeyCode.Space)) {
+			// First, drop the item we're holding
+			if (tileWereHolding != null) {
+				// Keep track of the fact that we just dropped this item so we don't pick it up again.
+				_lastTileWeHeld = tileWereHolding;
+				// Put it at out feet
+				tileWereHolding.transform.localPosition = new Vector3(0.2f, -0.4f, -0.1f);
+				tileWereHolding.dropped(this);
+			}
+
 			// Check to see if we're on top of an item that can be held
 			RaycastHit2D[] maybeResults = new RaycastHit2D[10];
 			int numObjectsFound = _body.Cast(Vector2.zero, maybeResults);
@@ -81,14 +93,26 @@ public class Player : Tile {
 					continue;
 				}
 				Tile tileHit = result.transform.GetComponent<Tile>();
+				// Ignore the tile we just dropped
+				if (tileHit == _lastTileWeHeld) {
+					continue;
+				}
 
 				if (tileHit.hasTag(TileTags.CanBeHeld)) {
-					Debug.Log("Found a thing to pick up" + tileHit);
 					tileHit.pickUp(this);
 				}
 
 			}
+
+			// Finally, clear the last tile we held so we can pick it up again next frame if we want to
+			_lastTileWeHeld = null;
+		}
+		if (Input.GetMouseButtonDown(0)) {
+			if (tileWereHolding != null) {
+				tileWereHolding.useAsItem(this);
+			}
 		}
 	}
+
 
 }

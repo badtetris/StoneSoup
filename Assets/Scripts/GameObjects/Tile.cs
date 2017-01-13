@@ -33,12 +33,28 @@ public class Tile : MonoBehaviour {
 		return (tags & tag) != 0;	
 	}
 
+	protected void removeTag(TileTags tagsToRemove) {
+		tags = tags & ~(tagsToRemove);
+	}
+
+	protected void addTag(TileTags tagsToAdd) {
+		tags |= tagsToAdd;
+	}
+
+
+
 	protected Rigidbody2D _body;
 	protected SpriteRenderer _sprite;
 	public SpriteRenderer sprite {
 		get { return _sprite; }
 	}
 	protected Animator _anim;
+	protected Collider2D _collider;
+
+	[HideInInspector]
+	public Tile tileWereHolding;
+
+	protected Tile _tileHoldingUs;
 
 	protected void moveViaVelocity(Vector2 direction, float speed, float acceleration) {
 		if (_body != null) {
@@ -48,9 +64,7 @@ public class Tile : MonoBehaviour {
 		}
 	}
 
-	protected void removeTag(TileTags tagsToRemove) {
-		tags = tags & ~(tagsToRemove);
-	}
+	
 
 	public virtual void init() {
 		_sprite = GetComponent<SpriteRenderer>();
@@ -61,6 +75,7 @@ public class Tile : MonoBehaviour {
 		else {
 			_body = GetComponent<Rigidbody2D>();
 		}
+		_collider = GetComponent<Collider2D>();
 	}
 
 	public virtual void pickUp(Tile tilePickingUsUp) {
@@ -68,13 +83,31 @@ public class Tile : MonoBehaviour {
 			return;
 		}
 		if (_body != null) {
+			_body.velocity = Vector2.zero;
 			_body.bodyType = RigidbodyType2D.Kinematic;
 		}
 		transform.parent = tilePickingUsUp.transform;
 		transform.localPosition = new Vector3(0.2f, -0.1f, -0.1f);
 		removeTag(TileTags.CanBeHeld);
-
+		tilePickingUsUp.tileWereHolding = this;
+		_tileHoldingUs = tilePickingUsUp;
 	}
+
+	public virtual void dropped(Tile tileDroppingUs) {
+		if (_tileHoldingUs != tileDroppingUs) {
+			return;
+		}
+		if (_body != null) {
+			_body.bodyType = RigidbodyType2D.Dynamic;
+		}
+		// We move ourselves to the current room when we're dropped
+		transform.parent = GameManager.instance.currentRoomObj.transform;
+		addTag(TileTags.CanBeHeld);
+		_tileHoldingUs.tileWereHolding = null;
+		_tileHoldingUs = null;
+	}
+
+
 
 	public virtual void useAsItem(Tile tileUsingUs) {
 
