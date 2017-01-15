@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour {
 
 	///////////////////
 	// PREFABS GO HERE
-	public GameObject[] generalTilePrefabs;
 
 
 	// END PREFABS
@@ -54,6 +53,8 @@ public class GameManager : MonoBehaviour {
 	[HideInInspector]
 	public Vector4 worldBoundaries; 
 
+	[HideInInspector]
+	public RoomGenerator[,] rooms;
 
 
 	// END GAME STATE PROPERTIES

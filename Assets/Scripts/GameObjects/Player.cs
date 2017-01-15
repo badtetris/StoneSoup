@@ -86,7 +86,6 @@ public class Player : Tile {
 			// Check to see if we're on top of an item that can be held
 			RaycastHit2D[] maybeResults = new RaycastHit2D[10];
 			int numObjectsFound = _body.Cast(Vector2.zero, maybeResults);
-			Debug.Log(numObjectsFound);
 			for (int i = 0; i < numObjectsFound && i < maybeResults.Length; i++) {
 				RaycastHit2D result = maybeResults[i];
 				if (result.transform.gameObject.tag != "Tile") {

@@ -32,7 +32,9 @@ public class Rock : Tile {
 
 		_collider.isTrigger = false;
 		Debug.Log(_collider.isTrigger);
+		_body.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 		_body.AddForce(throwDir*throwForce);
+
 		_afterThrowCounter = afterThrowTime;
 	}
 
@@ -43,6 +45,8 @@ public class Rock : Tile {
 			}
 			else if (_body.velocity.magnitude <= onGroundThreshold) {
 				_body.velocity = Vector2.zero;
+				_body.collisionDetectionMode = CollisionDetectionMode2D.Discrete;
+
 				_collider.isTrigger = true;
 				if (_tileThatThrewUs.GetComponent<Collider2D>() != null) {
 					Physics2D.IgnoreCollision(_tileThatThrewUs.GetComponent<Collider2D>(), _collider, false);

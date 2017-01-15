@@ -4,8 +4,65 @@ using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour {
 
-	public TextAsset designedLevelFile;
+	public const int ROOM_WIDTH = 10;
+	public const int ROOM_HEIGHT = 8;
 
+	public const int LOCAL_START_INDEX = 3;
+
+	public GameObject startRoomPrefab;
+	public GameObject[] otherRoomPrefabs;
+
+
+	public GameObject[] globalTilePrefabs;
+
+	public int numXRooms = 4;
+	public int numYRooms = 4;
+
+
+	public virtual void generateLevel() {
+		// We work by spawning rooms, positioning them, and having the rooms generate their items.
+
+		// TODO: build a critical path here and make sure that's included in the calculation.
+		// TODO: Create an invisible boundary that prevents the player from moving off screen.
+
+		float totalRoomWidth = Tile.TILE_SIZE*ROOM_WIDTH;
+		float totalRoomHeight = Tile.TILE_SIZE*ROOM_HEIGHT;
+
+		for (int x = 0; x < numXRooms; x++) {
+			for (int y = 0; y < numYRooms; y++) {
+				GameObject roomToSpawn = GlobalFuncs.getRandom(otherRoomPrefabs);
+
+				bool isStartRoom = x == numXRooms/2 && y == 0;
+				if (isStartRoom) {
+					roomToSpawn = startRoomPrefab;
+				}
+
+				GameObject roomObj = Instantiate(roomToSpawn) as GameObject;
+				roomObj.transform.parent = GameManager.instance.transform;
+				// Position our new room first.
+				roomObj.transform.localPosition = new Vector3(totalRoomWidth*x, totalRoomHeight*y, 0);
+
+				RoomGenerator generator = roomObj.GetComponent<RoomGenerator>();
+				generator.generateRoom(this);
+
+				if (isStartRoom) {
+					GameManager.instance.currentRoomPosition.x = roomObj.transform.localPosition.x+ROOM_WIDTH*Tile.TILE_SIZE/2;
+					GameManager.instance.currentRoomPosition.y = roomObj.transform.localPosition.y+ROOM_HEIGHT*Tile.TILE_SIZE/2;
+					GameManager.instance.currentRoomObj = roomObj;
+					GameManager.instance.currentRoomAuthor = generator.roomAuthor;
+				}
+				else {
+					roomObj.SetActive(false);
+				}
+
+			}
+		}
+
+
+	}
+
+
+	/*
 	public virtual void generateLevel() {
 		string initialGridString = designedLevelFile.text.Trim();
 		string[] rows = initialGridString.Trim().Split('\n');
@@ -90,5 +147,6 @@ public class LevelGenerator : MonoBehaviour {
 		GameManager.instance.currentRoomAuthor = "AP Thomson";
 
 	}
+	*/
 	
 }
