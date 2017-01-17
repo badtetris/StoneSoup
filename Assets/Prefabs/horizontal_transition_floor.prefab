@@ -20,7 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4322976006857356}
   - component: {fileID: 212163027715467392}
-  m_Layer: 0
+  - component: {fileID: 61051102477224294}
+  m_Layer: 8
   m_Name: horizontal_transition_floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,6 +41,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &61051102477224294
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1624604373729792}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 20, y: 2}
 --- !u!212 &212163027715467392
 SpriteRenderer:
   m_ObjectHideFlags: 1

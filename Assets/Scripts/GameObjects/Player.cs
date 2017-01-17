@@ -79,28 +79,33 @@ public class Player : Tile {
 				// Keep track of the fact that we just dropped this item so we don't pick it up again.
 				_lastTileWeHeld = tileWereHolding;
 				// Put it at out feet
-				tileWereHolding.transform.localPosition = new Vector3(0.2f, -0.4f, -0.1f);
 				tileWereHolding.dropped(this);
 			}
 
 			// Check to see if we're on top of an item that can be held
-			RaycastHit2D[] maybeResults = new RaycastHit2D[10];
-			int numObjectsFound = _body.Cast(Vector2.zero, maybeResults);
-			for (int i = 0; i < numObjectsFound && i < maybeResults.Length; i++) {
-				RaycastHit2D result = maybeResults[i];
-				if (result.transform.gameObject.tag != "Tile") {
-					continue;
-				}
-				Tile tileHit = result.transform.GetComponent<Tile>();
-				// Ignore the tile we just dropped
-				if (tileHit == _lastTileWeHeld) {
-					continue;
-				}
 
-				if (tileHit.hasTag(TileTags.CanBeHeld)) {
-					tileHit.pickUp(this);
+			// If we successully dropped the item
+			if (tileWereHolding == null) {
+				if (_maybeRaycastResults == null) {
+					_maybeRaycastResults = new RaycastHit2D[10];
 				}
+				int numObjectsFound = _body.Cast(Vector2.zero, _maybeRaycastResults);
+				for (int i = 0; i < numObjectsFound && i < _maybeRaycastResults.Length; i++) {
+					RaycastHit2D result = _maybeRaycastResults[i];
+					if (result.transform.gameObject.tag != "Tile") {
+						continue;
+					}
+					Tile tileHit = result.transform.GetComponent<Tile>();
+					// Ignore the tile we just dropped
+					if (tileHit == _lastTileWeHeld) {
+						continue;
+					}
 
+					if (tileHit.hasTag(TileTags.CanBeHeld)) {
+						tileHit.pickUp(this);
+					}
+
+				}
 			}
 
 			// Finally, clear the last tile we held so we can pick it up again next frame if we want to

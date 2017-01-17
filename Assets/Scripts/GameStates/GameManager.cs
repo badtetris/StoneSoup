@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour {
 	// PUBLIC REFERENCE OBJECTS GO HERE
 	public LevelGenerator levelGenerator;
 
+	public LetterBox letterBox; // Used by single room mode to make sure we only see one room at a time.
+
+
 	// END PUBLIC REFERENCE OBJECTS
 	///////////////////////////////////
 
@@ -99,7 +102,7 @@ public class GameManager : MonoBehaviour {
 				player.transform.parent = maybeRoomToMoveTo.transform;
 				_previousRoom = currentRoom;
 				currentRoom = maybeRoomToMoveTo;
-				unscaledInvoke("finishRoomTransition", 0.3f);
+				unscaledInvoke("finishRoomTransition", 0.5f);
 			}
 
 

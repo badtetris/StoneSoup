@@ -129,13 +129,18 @@ public class LevelGenerator : MonoBehaviour {
 					wallObj.transform.position = new Vector3((roomLeftX+roomRightX)/2f, roomTopY, 0);
 				}
 
-
-
-
 			}
 		}
 
 		GameManager.instance.roomGrid = roomGrid;
+
+
+		// Finally, activate the letterbox
+		float letterBoxTop = ((ROOM_HEIGHT+2)*Tile.TILE_SIZE)/2+Tile.TILE_SIZE/2f;
+		float letterBoxBottom = -((ROOM_HEIGHT+2)*Tile.TILE_SIZE)/2+Tile.TILE_SIZE/2f;
+		float letterBoxRight = ((ROOM_WIDTH+2)*Tile.TILE_SIZE)/2;
+		float letterBoxLeft = -letterBoxRight;
+		GameManager.instance.letterBox.activateLetterBox(letterBoxTop, letterBoxRight, letterBoxBottom, letterBoxLeft);
 
 
 	}

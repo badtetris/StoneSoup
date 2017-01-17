@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114480102213852366}
   - component: {fileID: 61311241722831102}
   - component: {fileID: 50663793027416766}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: player_tile
   m_TagString: Tile
   m_Icon: {fileID: 0}
@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tags: 12
+  tileWereHolding: {fileID: 0}
   moveSpeed: 10
   moveAcceleration: 100
 --- !u!212 &212776610787927230

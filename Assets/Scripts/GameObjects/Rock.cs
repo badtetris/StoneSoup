@@ -18,6 +18,9 @@ public class Rock : Tile {
 		if (_tileHoldingUs != tileUsingUs) {
 			return;
 		}
+		if (onTransitionArea()) {
+			return; // Don't allow us to be thrown while we're on a transition area.
+		}
 		_tileThatThrewUs = tileUsingUs;
 		_isInAir = true;
 		if (_tileThatThrewUs.GetComponent<Collider2D>() != null) {

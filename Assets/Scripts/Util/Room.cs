@@ -24,7 +24,7 @@ public class Room : MonoBehaviour {
 
 
 
-	public virtual void generateRoom(LevelGenerator ourGenerator) {
+	public virtual void generateRoom(LevelGenerator ourGenerator, params Dir[] requiredExits) {
 
 		string initialGridString = designedRoomFile.text;
 		string[] rows = initialGridString.Trim().Split('\n');
