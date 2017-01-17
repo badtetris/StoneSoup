@@ -26,12 +26,11 @@ public class Rock : Tile {
 		Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 		Vector2 throwDir = (mousePos - (Vector2)transform.position).normalized;
 		_body.bodyType = RigidbodyType2D.Dynamic;
-		transform.parent = GameManager.instance.currentRoomObj.transform;
+		transform.parent = GameManager.instance.currentRoom.transform;
 		_tileHoldingUs.tileWereHolding = null;
 		_tileHoldingUs = null;
 
 		_collider.isTrigger = false;
-		Debug.Log(_collider.isTrigger);
 		_body.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 		_body.AddForce(throwDir*throwForce);
 

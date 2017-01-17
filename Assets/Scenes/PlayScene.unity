@@ -312,10 +312,10 @@ RectTransform:
   m_Father: {fileID: 926088931}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 10}
-  m_SizeDelta: {x: 157.4, y: 20}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0.0014953613, y: 10}
+  m_SizeDelta: {x: -0.049987793, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &734297268
 MonoBehaviour:
@@ -398,10 +398,10 @@ RectTransform:
   m_Father: {fileID: 2083064059}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 10}
-  m_SizeDelta: {x: 157.4, y: 20}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -0.025001526, y: 10}
+  m_SizeDelta: {x: -0.049987793, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &926088932
 MonoBehaviour:
@@ -463,17 +463,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42786a9ae9bd9479a9a82298ec4c4a9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  generalTilePrefabs:
-  - {fileID: 1249101369981090, guid: ad909242602e14ab893ee3381803cc01, type: 2}
-  - {fileID: 1113547423427548, guid: 15584a55359f544b8aed48a2de6be57a, type: 2}
-  - {fileID: 1387771116485768, guid: e4d00d2fcd2614042856187fc264cd0d, type: 2}
-  - {fileID: 1387771116485768, guid: ce2d79339b8a6426fa12ae397abdfaad, type: 2}
   levelGenerator: {fileID: 114918456137113632, guid: d0342a0d2c2bf4c9e989336140a9aa86,
     type: 2}
-  currentRoomPosition: {x: 0, y: 0}
-  currentRoomObj: {fileID: 0}
-  currentRoomAuthor: Student A
   worldBoundaries: {x: 0, y: 0, z: 0, w: 0}
+  currentRoom: {fileID: 0}
 --- !u!4 &1705594157
 Transform:
   m_ObjectHideFlags: 0

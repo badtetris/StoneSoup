@@ -2,13 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoomGenerator : MonoBehaviour {
+public class Room : MonoBehaviour {
 
 	public string roomAuthor = "";
 
 	public TextAsset designedRoomFile;
 
 	public GameObject[] localTilePrefabs;
+
+	// Used by single room mode for centering the camera properly
+	public Vector2 roomCenter {
+		get { 
+			return new Vector2(transform.localPosition.x+LevelGenerator.ROOM_WIDTH*Tile.TILE_SIZE/2,
+				transform.localPosition.y+LevelGenerator.ROOM_HEIGHT*Tile.TILE_SIZE/2);
+		}
+	}
+
+	// This will be set by the level generator. Don't touch it if you don't want to break everything lol.
+	[HideInInspector]
+	public int roomGridX, roomGridY;
+
+
 
 	public virtual void generateRoom(LevelGenerator ourGenerator) {
 

@@ -12,7 +12,7 @@ public class CameraFollow : MonoBehaviour {
 		if (GameManager.gameMode == GameManager.GameMode.SingleRoom) {
 			// Basically, in single room mode, keep us centered over a single room.
 			// Note: we actually target 1/2 tile length below the room to make room for the UI.
-			newCameraPos = GameManager.instance.currentRoomPosition-Vector2.up*(Tile.TILE_SIZE/2f);
+			newCameraPos = GameManager.instance.currentRoom.roomCenter-Vector2.up*(Tile.TILE_SIZE/2f);
 		}
 		// Make sure our z-coordinate is left unchanged.
 		transform.position = new Vector3(newCameraPos.x, newCameraPos.y, transform.position.z);
@@ -25,7 +25,7 @@ public class CameraFollow : MonoBehaviour {
 		if (GameManager.gameMode == GameManager.GameMode.SingleRoom) {
 			// Basically, in single room mode, keep us centered over a single room.
 			// Note: we actually target 1/2 tile length below the room to make room for the UI.
-			newCameraPos = Vector2.Lerp(newCameraPos, GameManager.instance.currentRoomPosition-Vector2.up*(Tile.TILE_SIZE/2), cameraFollowSpeed*Time.deltaTime);
+			newCameraPos = Vector2.Lerp(newCameraPos, GameManager.instance.currentRoom.roomCenter-Vector2.up*(Tile.TILE_SIZE/2), cameraFollowSpeed*Time.unscaledDeltaTime);
 		}
 
 		// Make sure our z-coordinate is left unchanged.

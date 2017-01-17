@@ -101,7 +101,7 @@ public class Tile : MonoBehaviour {
 			_body.bodyType = RigidbodyType2D.Dynamic;
 		}
 		// We move ourselves to the current room when we're dropped
-		transform.parent = GameManager.instance.currentRoomObj.transform;
+		transform.parent = GameManager.instance.currentRoom.transform;
 		addTag(TileTags.CanBeHeld);
 		_tileHoldingUs.tileWereHolding = null;
 		_tileHoldingUs = null;

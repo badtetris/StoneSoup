@@ -58,5 +58,13 @@ MonoBehaviour:
   globalTilePrefabs:
   - {fileID: 1249101369981090, guid: ad909242602e14ab893ee3381803cc01, type: 2}
   - {fileID: 1113547423427548, guid: 15584a55359f544b8aed48a2de6be57a, type: 2}
+  verticalTransitionPrefab: {fileID: 1001502169237340, guid: 6c5451184736748caa5a052d1357c174,
+    type: 2}
+  verticalBorderWallPrefab: {fileID: 1488517227932344, guid: c7b40c3cb33ae48789ad241d46f20dac,
+    type: 2}
+  horizontalTransitionPrefab: {fileID: 1624604373729792, guid: d243dbffe99cd4ed798828debad93167,
+    type: 2}
+  horizontalBorderWallPrefab: {fileID: 1379190117789994, guid: a2a294c45ce1241ef8209f3569dda87f,
+    type: 2}
   numXRooms: 4
   numYRooms: 4
