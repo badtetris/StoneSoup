@@ -6,6 +6,9 @@ public class LetterBox : MonoBehaviour {
 
 	public SpriteRenderer topSquare, rightSquare, bottomSquare, leftSquare;
 
+	public SpriteRenderer topBorder, rightBorder, bottomBorder, leftBorder;
+
+
 	public void activateLetterBox(float top, float right, float bottom, float left) {
 
 		float screenRight = Camera.main.orthographicSize*Camera.main.aspect;
@@ -25,6 +28,12 @@ public class LetterBox : MonoBehaviour {
 		bottomSquare.transform.position = new Vector3(0, bottom, bottomSquare.transform.position.z);
 		leftSquare.transform.position = new Vector3(left, 0, leftSquare.transform.position.z);
 
+		topBorder.transform.position = new Vector3(0, top, topBorder.transform.position.z);
+		rightBorder.transform.position = new Vector3(right, Tile.TILE_SIZE/2, rightBorder.transform.position.z);
+		bottomBorder.transform.position = new Vector3(0, bottom, bottomBorder.transform.position.z);
+		leftBorder.transform.position = new Vector3(left, Tile.TILE_SIZE/2, leftBorder.transform.position.z);
+
+
 		float verticalWidth = right-left;
 		float horizontalHeight = 2*screenTop;
 
@@ -33,10 +42,21 @@ public class LetterBox : MonoBehaviour {
 		bottomSquare.transform.localScale = new Vector3(verticalWidth, bottomYScale, 1);
 		leftSquare.transform.localScale = new Vector3(leftXScale, horizontalHeight, 1);
 
+		topBorder.transform.localScale = new Vector3(right-left, 1, 1);
+		rightBorder.transform.localScale = new Vector3(1, top-bottom, 1);
+		bottomBorder.transform.localScale = new Vector3(right-left, 1, 1);
+		leftBorder.transform.localScale = new Vector3(1, top-bottom, 1);
+
+
 		topSquare.enabled = true;
 		rightSquare.enabled = true;
 		bottomSquare.enabled = true;
 		leftSquare.enabled = true;
+		topBorder.enabled = true;
+		rightBorder.enabled = true;
+		bottomBorder.enabled = true;
+		leftBorder.enabled = true;
+
 	}
 
 

@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour {
 		CombinedRooms,
 		Chaos
 	}
-	public static GameMode gameMode = GameMode.SingleRoom;
+	public static GameMode gameMode = GameMode.CombinedRooms;
 
 
 	// END TYPES
@@ -104,10 +104,22 @@ public class GameManager : MonoBehaviour {
 				currentRoom = maybeRoomToMoveTo;
 				unscaledInvoke("finishRoomTransition", 0.5f);
 			}
+		}
+		// Otherwise, just detect our current room based on where the player is
+		else {
+			Player player = Player.instance;
 
+			int playerRoomX = Mathf.FloorToInt(player.transform.position.x / (LevelGenerator.ROOM_WIDTH*Tile.TILE_SIZE));
+			int playerRoomY = Mathf.FloorToInt(player.transform.position.y / (LevelGenerator.ROOM_HEIGHT*Tile.TILE_SIZE));
+			int numXRooms = roomGrid.GetLength(0);
+			int numYRooms = roomGrid.GetLength(1);
+			if (playerRoomX >= 0 && playerRoomX < numXRooms && playerRoomY >= 0 && playerRoomY < numYRooms) {
+				currentRoom = roomGrid[playerRoomX, playerRoomY];
+			}
 
 
 		}
+
 	}
 
 	public void finishRoomTransition() {
