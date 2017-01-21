@@ -8,7 +8,10 @@ public enum TileTags {
 	CanBeHeld = 0x02,
 	Creature = 0x04,
 	Player = 0x08,
-	Enemy = 0x10
+	Enemy = 0x10,
+	Friendly = 0x20,
+	Weapon = 0x40,
+	Exit = 0x80
 }
 
 public class Tile : MonoBehaviour {

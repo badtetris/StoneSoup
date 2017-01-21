@@ -7,9 +7,10 @@ public class LevelGenerator : MonoBehaviour {
 	public const int ROOM_WIDTH = 10;
 	public const int ROOM_HEIGHT = 8;
 
-	public const int LOCAL_START_INDEX = 3;
+	public const int LOCAL_START_INDEX = 4;
 
 	public GameObject startRoomPrefab;
+	public GameObject exitRoomPrefab;
 	public GameObject[] otherRoomPrefabs;
 
 
@@ -146,6 +147,11 @@ public class LevelGenerator : MonoBehaviour {
 						nextRoomX++;
 					}
 				}
+			}
+
+
+			if (!makingCriticalPath) {
+				roomToSpawn = exitRoomPrefab;
 			}
 
 			GameObject roomObj = Instantiate(roomToSpawn) as GameObject;
@@ -316,6 +322,11 @@ public class LevelGenerator : MonoBehaviour {
 						nextRoomX++;
 					}
 				}
+			}
+
+
+			if (!makingCriticalPath) {
+				roomToSpawn = exitRoomPrefab;
 			}
 
 			GameObject roomObj = Instantiate(roomToSpawn) as GameObject;

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : Tile {
 
@@ -114,6 +115,15 @@ public class Player : Tile {
 		if (Input.GetMouseButtonDown(0)) {
 			if (tileWereHolding != null) {
 				tileWereHolding.useAsItem(this);
+			}
+		}
+	}
+
+	void OnTriggerEnter2D(Collider2D other) {
+		if (other.gameObject.tag == "Tile") {
+			Tile otherTile = other.transform.GetComponent<Tile>();
+			if (otherTile.hasTag(TileTags.Exit)) {
+				SceneManager.LoadScene("LevelCompleteScene");
 			}
 		}
 	}

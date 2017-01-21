@@ -53,11 +53,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startRoomPrefab: {fileID: 1335745978078546, guid: 850bb3f83990641f6a1be4624fc1e67e,
     type: 2}
+  exitRoomPrefab: {fileID: 1335745978078546, guid: cb9529cb24460473b9be220b40230951,
+    type: 2}
   otherRoomPrefabs:
   - {fileID: 1335745978078546, guid: c8a695a8ea5e043b4b0f41cb0f84a70b, type: 2}
   globalTilePrefabs:
   - {fileID: 1249101369981090, guid: ad909242602e14ab893ee3381803cc01, type: 2}
   - {fileID: 1113547423427548, guid: 15584a55359f544b8aed48a2de6be57a, type: 2}
+  - {fileID: 1759002711901290, guid: d801de884a7664f12b41f9ccf9872d6d, type: 2}
   normalWallPrefab: {fileID: 1249101369981090, guid: ad909242602e14ab893ee3381803cc01,
     type: 2}
   verticalTransitionPrefab: {fileID: 1001502169237340, guid: 6c5451184736748caa5a052d1357c174,
