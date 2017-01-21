@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour {
 	// GAME LOGIC GOES HERE
 
 	public void Awake () {
+		Application.targetFrameRate = 60;
 		_instance = this;
 		levelGenerator.generateLevel();
 	}

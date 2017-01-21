@@ -14,9 +14,25 @@ public enum TileTags {
 	Exit = 0x80
 }
 
+public enum DamageType {
+	Normal,
+	Explosive
+}
+
 public class Tile : MonoBehaviour {
 
 	public const float TILE_SIZE = 2f;
+
+	public float globalX {
+		get { return transform.position.x; }
+		set { transform.position = new Vector3(value, transform.position.y, transform.position.z); }
+	}
+
+	public float globalY {
+		get { return transform.position.y; }
+		set { transform.position = new Vector3(transform.position.x, value, transform.position.z); }
+	}
+
 
 	public float x {
 		get { return transform.localPosition.x; }
@@ -31,6 +47,10 @@ public class Tile : MonoBehaviour {
 	[SerializeField] 
 	[EnumFlagsAttribute]
 	public TileTags tags = 0;
+
+	public int maxHealth = 1;
+	public int health = 1;
+
 
 	public bool hasTag(TileTags tag) {
 		return (tags & tag) != 0;	
@@ -69,7 +89,11 @@ public class Tile : MonoBehaviour {
 		}
 	}
 
-	
+	public void addForce(Vector2 force) {
+		if (_body != null) {
+			_body.AddForce(force);
+		}
+	}
 
 	public virtual void init() {
 		_sprite = GetComponent<SpriteRenderer>();
@@ -81,6 +105,21 @@ public class Tile : MonoBehaviour {
 			_body = GetComponent<Rigidbody2D>();
 		}
 		_collider = GetComponent<Collider2D>();
+	}
+
+	public void takeDamage(int damageAmount) {
+		takeDamage(damageAmount, DamageType.Normal);
+	}
+
+	public virtual void takeDamage(int damageAmount, DamageType damageType) {
+		health-=damageAmount;
+		if (health <= 0) {
+			die();
+		}
+	}
+
+	protected virtual void die() {
+		Destroy(gameObject);
 	}
 
 	public virtual void pickUp(Tile tilePickingUsUp) {

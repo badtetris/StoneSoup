@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4113051429650106}
   - component: {fileID: 212269930273341580}
   - component: {fileID: 61520840255413838}
-  - component: {fileID: 114068140682788774}
+  - component: {fileID: 114434666876605362}
   m_Layer: 0
   m_Name: wall_tile
   m_TagString: Tile
@@ -56,7 +56,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 2, y: 2}
---- !u!114 &114068140682788774
+--- !u!114 &114434666876605362
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -64,10 +64,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1249101369981090}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df8383d5072aa4580900ddfbd2e7199b, type: 3}
+  m_Script: {fileID: 11500000, guid: 3fa4e4c2cd8834b37819349de3d5f41b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tags: 1
+  maxHealth: 1
+  health: 1
   tileWereHolding: {fileID: 0}
 --- !u!212 &212269930273341580
 SpriteRenderer:

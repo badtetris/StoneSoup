@@ -106,7 +106,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f103f60eb9ad422c9e8694ecb6e6747, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tags: 12
+  tags: 44
+  maxHealth: 2
+  health: 2
   tileWereHolding: {fileID: 0}
   moveSpeed: 10
   moveAcceleration: 100

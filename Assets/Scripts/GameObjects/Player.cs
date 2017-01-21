@@ -12,6 +12,9 @@ public class Player : Tile {
 
 	protected Tile _lastTileWeHeld = null;
 
+	// How long we're invincible after receiving a hit.
+	protected float _iFrameTimer = 0;
+	public float totalIFrameTime = 0.5f;
 
 	// Like the GameManager, there should always only be one player, globally accessible
 	protected static Player _instance = null;
@@ -23,6 +26,17 @@ public class Player : Tile {
 	}
 	void OnDestroy() {
 		_instance = null;
+	}
+
+	public override void takeDamage(int amount, DamageType damageType) {
+		if (_iFrameTimer <= 0) {
+			base.takeDamage(amount, damageType);
+			_iFrameTimer = totalIFrameTime;
+		}
+	}
+
+	protected override void die() {
+		// TODO: let's go to the lose scene after watching the player fall.
 	}
 
 	void FixedUpdate() {
@@ -74,6 +88,14 @@ public class Player : Tile {
 	}
 
 	void Update() {
+		if (_iFrameTimer > 0) {
+			_iFrameTimer -= Time.deltaTime;
+			_sprite.enabled = !_sprite.enabled;
+			if (_iFrameTimer <= 0) {
+				_sprite.enabled = true;
+			}
+		}
+
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			// First, drop the item we're holding
 			if (tileWereHolding != null) {
