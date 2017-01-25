@@ -29,8 +29,7 @@ public class Rock : Tile {
 		if (_tileThatThrewUs.GetComponent<Collider2D>() != null) {
 			Physics2D.IgnoreCollision(_tileThatThrewUs.GetComponent<Collider2D>(), _collider, true);
 		}
-		Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		Vector2 throwDir = (mousePos - (Vector2)transform.position).normalized;
+		Vector2 throwDir = _tileThatThrewUs.aimDirection.normalized;
 		_body.bodyType = RigidbodyType2D.Dynamic;
 		transform.parent = GameManager.instance.currentRoom.transform;
 		_tileHoldingUs.tileWereHolding = null;
@@ -57,6 +56,8 @@ public class Rock : Tile {
 				_collider.isTrigger = true;
 				addTag(TileTags.CanBeHeld);
 				_isInAir = false;
+				_sprite.sortingLayerID = SortingLayer.NameToID("Floor");
+
 			}
 		}
 	}

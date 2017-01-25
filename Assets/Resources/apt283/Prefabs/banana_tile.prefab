@@ -89,6 +89,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tags: 2
+  maxHealth: 1
+  health: 1
   tileWereHolding: {fileID: 0}
 --- !u!212 &212227872059390898
 SpriteRenderer:
@@ -119,7 +121,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: 2084018341
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 66efb97d9cbdf4888ac603659069a1d0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

@@ -37,6 +37,7 @@ public class Player : Tile {
 
 	protected override void die() {
 		// TODO: let's go to the lose scene after watching the player fall.
+		SceneManager.LoadScene("GameOverScene");
 	}
 
 	void FixedUpdate() {
@@ -88,6 +89,13 @@ public class Player : Tile {
 	}
 
 	void Update() {
+
+		// Update our aim direction
+		Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		Vector2 toMouse = (mousePosition - (Vector2)transform.position).normalized;
+		aimDirection = toMouse;
+
+
 		if (_iFrameTimer > 0) {
 			_iFrameTimer -= Time.deltaTime;
 			_sprite.enabled = !_sprite.enabled;

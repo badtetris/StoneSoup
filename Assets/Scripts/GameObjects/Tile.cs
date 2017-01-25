@@ -79,6 +79,9 @@ public class Tile : MonoBehaviour {
 	[HideInInspector]
 	public Tile tileWereHolding;
 
+	[HideInInspector]
+	public Vector2 aimDirection;
+
 	protected Tile _tileHoldingUs;
 
 	protected void moveViaVelocity(Vector2 direction, float speed, float acceleration) {
@@ -135,6 +138,7 @@ public class Tile : MonoBehaviour {
 		removeTag(TileTags.CanBeHeld);
 		tilePickingUsUp.tileWereHolding = this;
 		_tileHoldingUs = tilePickingUsUp;
+		_sprite.sortingLayerID = SortingLayer.NameToID("Default");
 	}
 
 	public virtual void dropped(Tile tileDroppingUs) {
@@ -154,6 +158,7 @@ public class Tile : MonoBehaviour {
 		addTag(TileTags.CanBeHeld);
 		_tileHoldingUs.tileWereHolding = null;
 		_tileHoldingUs = null;
+		_sprite.sortingLayerID = SortingLayer.NameToID("Floor");
 	}
 
 
