@@ -16,6 +16,13 @@ public class Rock : Tile {
 	protected float _afterThrowCounter;
 	public float afterThrowTime = 0.2f;
 
+	public override void takeDamage(int amount, DamageType damageType) {
+		if (damageType == DamageType.Explosive) {
+			base.takeDamage(amount, damageType);
+		}
+	}
+	
+
 	// Idea is that we get thrown when we're used
 	public override void useAsItem(Tile tileUsingUs) {
 		if (_tileHoldingUs != tileUsingUs) {
@@ -49,7 +56,7 @@ public class Rock : Tile {
 			}
 			else if (_body.velocity.magnitude <= onGroundThreshold) {
 				_body.velocity = Vector2.zero;
-				if (_afterThrowCounter <= 0 && _tileThatThrewUs.GetComponent<Collider2D>() != null) {
+				if (_afterThrowCounter <= 0 && _tileThatThrewUs != null && _tileThatThrewUs.GetComponent<Collider2D>() != null) {
 					Physics2D.IgnoreCollision(_tileThatThrewUs.GetComponent<Collider2D>(), _collider, false);
 				}
 				_body.collisionDetectionMode = CollisionDetectionMode2D.Discrete;
