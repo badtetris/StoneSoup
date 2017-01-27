@@ -122,6 +122,9 @@ public class Tile : MonoBehaviour {
 	}
 
 	protected virtual void die() {
+		if (tileWereHolding != null) {
+			tileWereHolding.dropped(this);
+		}
 		Destroy(gameObject);
 	}
 

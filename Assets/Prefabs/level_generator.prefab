@@ -55,8 +55,8 @@ MonoBehaviour:
     type: 2}
   exitRoomPrefab: {fileID: 1335745978078546, guid: cb9529cb24460473b9be220b40230951,
     type: 2}
-  otherRoomPrefabs:
-  - {fileID: 1335745978078546, guid: c8a695a8ea5e043b4b0f41cb0f84a70b, type: 2}
+  netIDs:
+  - apt283
   globalTilePrefabs:
   - {fileID: 1249101369981090, guid: ad909242602e14ab893ee3381803cc01, type: 2}
   - {fileID: 1113547423427548, guid: 15584a55359f544b8aed48a2de6be57a, type: 2}

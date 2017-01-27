@@ -11,7 +11,8 @@ public class LevelGenerator : MonoBehaviour {
 
 	public GameObject startRoomPrefab;
 	public GameObject exitRoomPrefab;
-	public GameObject[] otherRoomPrefabs;
+
+	public string[] netIDs;
 
 
 	public GameObject[] globalTilePrefabs;
@@ -29,7 +30,9 @@ public class LevelGenerator : MonoBehaviour {
 
 
 	protected GameObject nextRoomToSpawn() {
-		return GlobalFuncs.getRandom(otherRoomPrefabs);
+		string netID = GlobalFuncs.getRandom(netIDs);
+		string roomPath = string.Format("{0}/room", netID);
+		return Resources.Load<GameObject>(roomPath); 
 	}
 
 	public virtual void generateLevel() {
