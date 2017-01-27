@@ -113,10 +113,10 @@ public class Player : Tile {
 				tileWereHolding.dropped(this);
 			}
 
-			// Check to see if we're on top of an item that can be held
 
 			// If we successully dropped the item
 			if (tileWereHolding == null) {
+				// Check to see if we're on top of an item that can be held
 				if (_maybeRaycastResults == null) {
 					_maybeRaycastResults = new RaycastHit2D[10];
 				}
@@ -134,6 +134,9 @@ public class Player : Tile {
 
 					if (tileHit.hasTag(TileTags.CanBeHeld)) {
 						tileHit.pickUp(this);
+						if (tileWereHolding != null) {
+							break;
+						}
 					}
 
 				}
