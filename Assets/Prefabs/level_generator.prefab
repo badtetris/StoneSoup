@@ -57,6 +57,7 @@ MonoBehaviour:
     type: 2}
   netIDs:
   - apt283
+  - fakeNetID
   globalTilePrefabs:
   - {fileID: 1249101369981090, guid: ad909242602e14ab893ee3381803cc01, type: 2}
   - {fileID: 1113547423427548, guid: 15584a55359f544b8aed48a2de6be57a, type: 2}

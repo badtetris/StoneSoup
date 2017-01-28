@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
@@ -43,11 +44,6 @@ public class GameManager : MonoBehaviour {
 
 	// These are protected properties that we only want to access via script (not via inspector)
 
-	// The min/max of the entire world (for the purposes of the camera follow)
-	// Set up as (minX, minY, maxX, maxY)
-	[HideInInspector]
-	public Vector4 worldBoundaries; 
-
 	[HideInInspector]
 	public Room[,] roomGrid;
 
@@ -55,6 +51,10 @@ public class GameManager : MonoBehaviour {
 	public Room currentRoom;
 	protected Room _previousRoom; // So we can turn off the previous room in singleroom mode.
 
+	[HideInInspector]
+	public GameObject borderObjects;
+
+	protected bool _gameIsOver = false;
 
 	// END GAME STATE PROPERTIES
 	/////////////////////////////////
@@ -72,6 +72,10 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	public void Update () {
+		if (_gameIsOver) {
+			return;
+		}
+
 		// In Single Room Mode, we handle room transitions!
 		if (gameMode == GameMode.SingleRoom) {
 			Player player = Player.instance;
@@ -127,6 +131,47 @@ public class GameManager : MonoBehaviour {
 		_previousRoom.gameObject.SetActive(false);
 		Time.timeScale = 1;
 	}
+
+	public void playerJustDefeated(Tile tileThatKilledPlayer) {
+		Time.timeScale = 0;
+		_gameIsOver = true;
+		// Start by making the player and tile that killed the player not children of the rooms
+		Player.instance.transform.parent = transform;
+		tileThatKilledPlayer.transform.parent = transform;
+		borderObjects.SetActive(false);
+		StartCoroutine(playerDefeatedSequence());
+	}
+
+	protected IEnumerator playerDefeatedSequence() {
+		if (gameMode == GameMode.SingleRoom) {
+			currentRoom.gameObject.SetActive(false);
+		}
+		else {
+			int numXRooms = roomGrid.GetLength(0);
+			int numYRooms = roomGrid.GetLength(1);
+			for (int x = 0; x < numXRooms; x++) {
+				for (int y = 0; y < numYRooms; y++) {
+					roomGrid[x, y].gameObject.SetActive(false);
+					float t = 0.1f;
+					while (t > 0) {
+						yield return 0;
+						t -= Time.unscaledDeltaTime;
+					}
+				}
+			}
+		}
+		float finalT = 1.5f;
+		while (finalT > 0) {
+			yield return 0;
+			finalT -= Time.unscaledDeltaTime;
+		}
+		Time.timeScale = 1;
+		SceneManager.LoadScene("GameOverScene");
+
+	}
+
+
+
 
 	// END GAME LOGIC
 	////////////////////////

@@ -28,16 +28,19 @@ public class Player : Tile {
 		_instance = null;
 	}
 
-	public override void takeDamage(int amount, DamageType damageType) {
+	public override void takeDamage(Tile tileDamagingUs, int amount, DamageType damageType) {
 		if (_iFrameTimer <= 0) {
-			base.takeDamage(amount, damageType);
-			_iFrameTimer = totalIFrameTime;
+			// If this is enough damage to kill us, we start the death sequence.
+			if (amount >= health && health > 0) {
+				health = 0;
+				GameManager.instance.playerJustDefeated(tileDamagingUs);
+			}
+			else {
+				base.takeDamage(tileDamagingUs, amount, damageType);
+				_iFrameTimer = totalIFrameTime;
+			}
+			
 		}
-	}
-
-	protected override void die() {
-		// TODO: let's go to the lose scene after watching the player fall.
-		SceneManager.LoadScene("GameOverScene");
 	}
 
 	void FixedUpdate() {

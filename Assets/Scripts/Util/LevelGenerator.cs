@@ -29,8 +29,26 @@ public class LevelGenerator : MonoBehaviour {
 	public int numYRooms = 4;
 
 
+	protected string[] _netIDBag = null;
+	protected int _currentBagIndex = 0;
+
+	protected void createNewNetIDBag() {
+		_netIDBag = new string[netIDs.Length*2];
+		for (int i = 0; i < _netIDBag.Length; i++) {
+			_netIDBag[i] = netIDs[i % netIDs.Length];
+		}
+		GlobalFuncs.shuffle(_netIDBag);
+		_currentBagIndex = 0;
+	}
+
+
 	protected GameObject nextRoomToSpawn() {
-		string netID = GlobalFuncs.getRandom(netIDs);
+		if (_netIDBag == null || _currentBagIndex >= _netIDBag.Length) {
+			createNewNetIDBag();
+		}
+		string netID = _netIDBag[_currentBagIndex];
+		_currentBagIndex++;
+
 		string roomPath = string.Format("{0}/room", netID);
 		return Resources.Load<GameObject>(roomPath); 
 	}
@@ -39,7 +57,8 @@ public class LevelGenerator : MonoBehaviour {
 		if (GameManager.gameMode == GameManager.GameMode.SingleRoom) {
 			generateSingleRoomModeLevel();
 		}
-		else if (GameManager.gameMode == GameManager.GameMode.CombinedRooms) {
+		else if (GameManager.gameMode == GameManager.GameMode.CombinedRooms
+			|| GameManager.gameMode == GameManager.GameMode.Chaos) {
 			generateCombinedRoomModeLevel();
 		}
 	}
@@ -109,7 +128,7 @@ public class LevelGenerator : MonoBehaviour {
 				}
 				else {
 					// Move on if we randomly choose to
-					if (Random.Range(0, 4) == 0) {
+					if (Random.Range(0, 5) == 0) {
 						if (currentRoomY >= numYRooms-1) {
 							makingCriticalPath = false;
 						}
@@ -136,7 +155,7 @@ public class LevelGenerator : MonoBehaviour {
 					}
 				}
 				else {
-					if (Random.Range(0, 4) == 0) {
+					if (Random.Range(0, 5) == 0) {
 						if (currentRoomY >= numYRooms-1) {
 							makingCriticalPath = false;
 						}
@@ -226,6 +245,43 @@ public class LevelGenerator : MonoBehaviour {
 
 
 		GameManager.instance.roomGrid = roomGrid;
+		GameManager.instance.borderObjects = borderObjects;
+
+		// Now as a final step, if we're doing chaos mode, we need to randomly rearrange all spawned tiles (that aren't walls, players, or exits)
+		if (GameManager.gameMode == GameManager.GameMode.Chaos) {
+			List<Tile> tilesToRearrange = new List<Tile>();
+			// Go through each room looking for tiles.
+			for (int x = 0; x < numXRooms; x++) {
+				for (int y = 0; y < numYRooms; y++) {
+					Room room = roomGrid[x, y];
+					foreach (Tile tile in room.GetComponentsInChildren<Tile>(true)) {
+						if (tile.hasTag(TileTags.Player | TileTags.Wall | TileTags.Exit)) {
+							continue;
+						}
+						tilesToRearrange.Add(tile);
+					}
+				}
+			}
+
+			// Now we have a list of tiles, let's randomly shuffle their locations.
+			for (int i = 0; i < tilesToRearrange.Count*4; i++) {
+				Tile tile1 = GlobalFuncs.getRandom(tilesToRearrange);
+				Tile tile2 = GlobalFuncs.getRandom(tilesToRearrange);
+
+				Transform tile1OldParent = tile1.transform.parent;
+				Vector2 tile1OldPosition = tile1.transform.localPosition;
+
+				tile1.transform.parent = tile2.transform.parent;
+				tile1.transform.localPosition = new Vector3(tile2.transform.localPosition.x, tile2.transform.localPosition.y, tile1.transform.localPosition.z);
+
+				tile2.transform.parent = tile1OldParent;
+				tile2.transform.localPosition = new Vector3(tile1OldPosition.x, tile1OldPosition.y, tile2.transform.localPosition.z);
+
+			}
+
+		}
+
+
 
 
 	}
@@ -434,6 +490,7 @@ public class LevelGenerator : MonoBehaviour {
 		}
 
 		GameManager.instance.roomGrid = roomGrid;
+		GameManager.instance.borderObjects = borderObjects;
 
 
 		// Finally, activate the letterbox

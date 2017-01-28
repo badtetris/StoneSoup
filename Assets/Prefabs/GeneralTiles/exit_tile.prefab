@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4673939774211954}
   - component: {fileID: 212786888573611460}
   - component: {fileID: 61756950755725140}
-  - component: {fileID: 114792771365612480}
+  - component: {fileID: 114332597532891734}
   m_Layer: 0
   m_Name: exit_tile
   m_TagString: Tile
@@ -55,8 +55,8 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Size: {x: 2, y: 2}
---- !u!114 &114792771365612480
+  m_Size: {x: 1, y: 1}
+--- !u!114 &114332597532891734
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -64,11 +64,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1759002711901290}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df8383d5072aa4580900ddfbd2e7199b, type: 3}
+  m_Script: {fileID: 11500000, guid: f3875608f07a34bfd8a9c57bf1683b42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tags: 128
+  maxHealth: 1
+  health: 1
   tileWereHolding: {fileID: 0}
+  aimDirection: {x: 0, y: 0}
 --- !u!212 &212786888573611460
 SpriteRenderer:
   m_ObjectHideFlags: 1

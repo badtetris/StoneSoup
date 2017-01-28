@@ -107,11 +107,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tags: 44
-  maxHealth: 2
-  health: 2
+  maxHealth: 3
+  health: 3
   tileWereHolding: {fileID: 0}
+  aimDirection: {x: 0, y: 0}
   moveSpeed: 10
   moveAcceleration: 100
+  totalIFrameTime: 0.5
 --- !u!212 &212776610787927230
 SpriteRenderer:
   m_ObjectHideFlags: 1

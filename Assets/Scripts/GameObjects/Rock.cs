@@ -16,12 +16,12 @@ public class Rock : Tile {
 	protected float _afterThrowCounter;
 	public float afterThrowTime = 0.2f;
 
-	public override void takeDamage(int amount, DamageType damageType) {
+	public override void takeDamage(Tile tileDamagingUs, int amount, DamageType damageType) {
 		if (damageType == DamageType.Explosive) {
-			base.takeDamage(amount, damageType);
+			base.takeDamage(tileDamagingUs, amount, damageType);
 		}
 	}
-	
+
 
 	// Idea is that we get thrown when we're used
 	public override void useAsItem(Tile tileUsingUs) {
@@ -76,7 +76,7 @@ public class Rock : Tile {
 				return;
 			}
 			Tile otherTile = collision.gameObject.GetComponent<Tile>();
-			otherTile.takeDamage(1);
+			otherTile.takeDamage(this, 1);
 			otherTile.addForce(_body.velocity.normalized*damageForce);
 		}
 	}

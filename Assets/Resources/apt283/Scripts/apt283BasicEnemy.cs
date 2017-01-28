@@ -103,7 +103,7 @@ public class apt283BasicEnemy : Tile {
 		}
 
 		if (tileWereHolding != null) {
-		if (_checkForPlayerCounter <= 0) {
+			if (_checkForPlayerCounter <= 0) {
 			// Send our a big circle to look for the player.
 				Collider2D[] maybeColliders = Physics2D.OverlapCircleAll(transform.position, playerAwarenessRadius);
 				foreach (Collider2D maybeCollider in maybeColliders) {
@@ -159,11 +159,19 @@ public class apt283BasicEnemy : Tile {
 		if (collision.gameObject.tag == "Tile") {
 			Tile otherTile = collision.gameObject.GetComponent<Tile>();
 			if (otherTile.hasTag(TileTags.Friendly)) {
-				otherTile.takeDamage(1);
+				otherTile.takeDamage(this, 1);
 				Vector2 toOtherTile = (Vector2)otherTile.transform.position - (Vector2)transform.position;
 				toOtherTile.Normalize();
 				otherTile.addForce(damageForce*toOtherTile);
 			}
 		}
 	}
+
+	void OnTriggerEnter2D(Collider2D other) {
+		Tile otherTile = other.GetComponent<Tile>();
+		if (tileWereHolding == null && otherTile != null && otherTile.hasTag(TileTags.CanBeHeld) && otherTile.hasTag(TileTags.Weapon)) {
+			otherTile.pickUp(this);
+		}
+	}
+
 }

@@ -110,11 +110,11 @@ public class Tile : MonoBehaviour {
 		_collider = GetComponent<Collider2D>();
 	}
 
-	public void takeDamage(int damageAmount) {
-		takeDamage(damageAmount, DamageType.Normal);
+	public void takeDamage(Tile tileDamagingUs, int damageAmount) {
+		takeDamage(tileDamagingUs, damageAmount, DamageType.Normal);
 	}
 
-	public virtual void takeDamage(int damageAmount, DamageType damageType) {
+	public virtual void takeDamage(Tile tileDamagingUs, int damageAmount, DamageType damageType) {
 		health-=damageAmount;
 		if (health <= 0) {
 			die();

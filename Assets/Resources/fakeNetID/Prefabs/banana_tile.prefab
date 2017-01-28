@@ -92,6 +92,7 @@ MonoBehaviour:
   maxHealth: 1
   health: 1
   tileWereHolding: {fileID: 0}
+  aimDirection: {x: 0, y: 0}
 --- !u!212 &212227872059390898
 SpriteRenderer:
   m_ObjectHideFlags: 1
