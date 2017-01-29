@@ -48,6 +48,8 @@ public class Tile : MonoBehaviour {
 	[EnumFlagsAttribute]
 	public TileTags tags = 0;
 
+	public string tileName = "";
+
 	public int maxHealth = 1;
 	public int health = 1;
 

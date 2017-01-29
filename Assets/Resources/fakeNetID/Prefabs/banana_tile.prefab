@@ -89,6 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tags: 2
+  tileName: Banana
   maxHealth: 1
   health: 1
   tileWereHolding: {fileID: 0}

@@ -42,6 +42,11 @@ public class GameManager : MonoBehaviour {
 		get { return _instance; }
 	}
 
+
+	// A counter for how many levels we've played so far. 
+	// Perhaps you could use this in your generation to make your rooms steadily increase in difficulty.
+	public static int levelNumber = 1;
+
 	// These are protected properties that we only want to access via script (not via inspector)
 
 	[HideInInspector]
@@ -55,6 +60,9 @@ public class GameManager : MonoBehaviour {
 	public GameObject borderObjects;
 
 	protected bool _gameIsOver = false;
+	public bool gameIsOver {
+		get { return _gameIsOver; }
+	}
 
 	// END GAME STATE PROPERTIES
 	/////////////////////////////////
@@ -120,6 +128,7 @@ public class GameManager : MonoBehaviour {
 			int numYRooms = roomGrid.GetLength(1);
 			if (playerRoomX >= 0 && playerRoomX < numXRooms && playerRoomY >= 0 && playerRoomY < numYRooms) {
 				currentRoom = roomGrid[playerRoomX, playerRoomY];
+				Player.instance.transform.parent = currentRoom.transform;
 			}
 
 
@@ -133,11 +142,15 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void playerJustDefeated(Tile tileThatKilledPlayer) {
+		if (_gameIsOver) {
+			return;
+		}
 		Time.timeScale = 0;
 		_gameIsOver = true;
 		// Start by making the player and tile that killed the player not children of the rooms
 		Player.instance.transform.parent = transform;
 		tileThatKilledPlayer.transform.parent = transform;
+		tileThatKilledPlayer.transform.localPosition = new Vector3(tileThatKilledPlayer.transform.localPosition.x, tileThatKilledPlayer.transform.localPosition.y, Player.instance.transform.localPosition.z-0.1f);
 		borderObjects.SetActive(false);
 		StartCoroutine(playerDefeatedSequence());
 	}
@@ -152,7 +165,7 @@ public class GameManager : MonoBehaviour {
 			for (int x = 0; x < numXRooms; x++) {
 				for (int y = 0; y < numYRooms; y++) {
 					roomGrid[x, y].gameObject.SetActive(false);
-					float t = 0.1f;
+					float t = 0.05f;
 					while (t > 0) {
 						yield return 0;
 						t -= Time.unscaledDeltaTime;
@@ -160,7 +173,7 @@ public class GameManager : MonoBehaviour {
 				}
 			}
 		}
-		float finalT = 1.5f;
+		float finalT = 0.5f;
 		while (finalT > 0) {
 			yield return 0;
 			finalT -= Time.unscaledDeltaTime;
@@ -168,6 +181,41 @@ public class GameManager : MonoBehaviour {
 		Time.timeScale = 1;
 		SceneManager.LoadScene("GameOverScene");
 
+	}
+
+	public void playerJustWon() {
+		if (_gameIsOver) {
+			return;
+		}
+		Time.timeScale = 0;
+		_gameIsOver = true;
+		borderObjects.SetActive(false);
+		int numXRooms = roomGrid.GetLength(0);
+		int numYRooms = roomGrid.GetLength(1);
+		for (int x = 0; x < numXRooms; x++) {
+			for (int y = 0; y < numYRooms; y++) {
+				if (roomGrid[x, y] != currentRoom) {
+					roomGrid[x, y].gameObject.SetActive(false);
+				}
+			}
+		}
+		StartCoroutine(wonSequence());
+	}
+
+	protected IEnumerator wonSequence() {
+		foreach (Transform child in currentRoom.transform) {
+			Tile tile = child.GetComponent<Tile>();
+			if (tile != null && !tile.hasTag(TileTags.Player | TileTags.Exit)) {
+				tile.gameObject.SetActive(false);
+				float t = 0.05f;
+				while (t > 0) {
+					yield return 0;
+					t -= Time.unscaledDeltaTime;
+				}
+			}
+		}
+		Time.timeScale = 1;
+		SceneManager.LoadScene("LevelCompleteScene");
 	}
 
 

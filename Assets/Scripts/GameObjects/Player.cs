@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class Player : Tile {
 
+	public GameObject handSymbol;
+
 	public float moveSpeed = 10f;
 	public float moveAcceleration = 10f;
 
@@ -29,11 +31,13 @@ public class Player : Tile {
 	}
 
 	public override void takeDamage(Tile tileDamagingUs, int amount, DamageType damageType) {
-		if (_iFrameTimer <= 0) {
+		if (_iFrameTimer <= 0 && !GameManager.instance.gameIsOver) {
 			// If this is enough damage to kill us, we start the death sequence.
-			if (amount >= health && health > 0) {
+			if (amount >= health) {
+				if (health > 0) {
+					GameManager.instance.playerJustDefeated(tileDamagingUs);
+				}
 				health = 0;
-				GameManager.instance.playerJustDefeated(tileDamagingUs);
 			}
 			else {
 				base.takeDamage(tileDamagingUs, amount, damageType);
@@ -89,6 +93,29 @@ public class Player : Tile {
 		_anim.SetBool("Walking", attemptToMoveDir.x != 0 || attemptToMoveDir.y != 0);
 		_anim.SetInteger("Direction", _walkDirection);
 		moveViaVelocity(attemptToMoveDir, moveSpeed, moveAcceleration);
+
+
+		// Now check if we're on top of an item we can pick up, if so, display the hand symbol.
+		bool onItem = false;
+		if (_maybeRaycastResults == null) {
+			_maybeRaycastResults = new RaycastHit2D[10];
+		}
+		int numObjectsFound = _body.Cast(Vector2.zero, _maybeRaycastResults);
+		for (int i = 0; i < numObjectsFound && i < _maybeRaycastResults.Length; i++) {
+			RaycastHit2D result = _maybeRaycastResults[i];
+			if (result.transform.gameObject.tag != "Tile") {
+				continue;
+			}
+			Tile tileHit = result.transform.GetComponent<Tile>();
+			
+			if (tileHit.hasTag(TileTags.CanBeHeld)) {
+				onItem = true;
+				if (tileWereHolding != null) {
+					break;
+				}
+			}
+		}
+		handSymbol.SetActive(onItem);
 	}
 
 	void Update() {
@@ -159,7 +186,7 @@ public class Player : Tile {
 		if (other.gameObject.tag == "Tile") {
 			Tile otherTile = other.transform.GetComponent<Tile>();
 			if (otherTile.hasTag(TileTags.Exit)) {
-				SceneManager.LoadScene("LevelCompleteScene");
+				GameManager.instance.playerJustWon();
 			}
 		}
 	}

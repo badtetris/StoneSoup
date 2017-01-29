@@ -89,9 +89,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tags: 66
+  tileName: Rock
   maxHealth: 1
   health: 1
   tileWereHolding: {fileID: 0}
+  aimDirection: {x: 0, y: 0}
   throwForce: 3000
   onGroundThreshold: 0.8
   damageThreshold: 14

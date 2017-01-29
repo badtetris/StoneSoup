@@ -118,6 +118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tags: 66
+  tileName: Sword
   maxHealth: 1
   health: 1
   tileWereHolding: {fileID: 0}
