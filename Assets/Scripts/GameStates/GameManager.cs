@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour {
 
 	// A counter for how many levels we've played so far. 
 	// Perhaps you could use this in your generation to make your rooms steadily increase in difficulty.
-	public static int levelNumber = 1;
+	public static int levelNumber = 0;
 
 	// These are protected properties that we only want to access via script (not via inspector)
 
@@ -83,6 +83,12 @@ public class GameManager : MonoBehaviour {
 		if (_gameIsOver) {
 			return;
 		}
+
+		// See if we should return to the main menu screen?
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			SceneManager.LoadScene("MainMenuScene");
+		}
+
 
 		// In Single Room Mode, we handle room transitions!
 		if (gameMode == GameMode.SingleRoom) {
@@ -187,6 +193,7 @@ public class GameManager : MonoBehaviour {
 		if (_gameIsOver) {
 			return;
 		}
+		levelNumber++;
 		Time.timeScale = 0;
 		_gameIsOver = true;
 		borderObjects.SetActive(false);
@@ -217,9 +224,6 @@ public class GameManager : MonoBehaviour {
 		Time.timeScale = 1;
 		SceneManager.LoadScene("LevelCompleteScene");
 	}
-
-
-
 
 	// END GAME LOGIC
 	////////////////////////

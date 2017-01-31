@@ -19,4 +19,8 @@ public class MainMenu : MonoBehaviour {
 		GameManager.gameMode = GameManager.GameMode.Chaos;
 		SceneManager.LoadScene("PlayScene");
 	}
+
+	public void quit() {
+		Application.Quit();
+	}
 }

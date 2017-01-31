@@ -437,21 +437,21 @@ public class LevelGenerator : MonoBehaviour {
 
 				// Always spawn a lower left wall.
 				Vector2 bottomLeftWallGrid = Tile.toGridCoord(roomLeftX, roomBottomY);
-				Tile.spawnTile(indestructibleWallPrefab, borderObjects.transform, (int)bottomLeftWallGrid.x, (int)bottomLeftWallGrid.y);
+				spawnTileOutsideRoom(indestructibleWallPrefab, borderObjects.transform, (int)bottomLeftWallGrid.x, (int)bottomLeftWallGrid.y);
 				if (y == numYRooms-1) {
 					// Spawn an upper left wall if we're at the top
 					Vector2 topLeftWallGrid = Tile.toGridCoord(roomLeftX, roomTopY);
-					Tile.spawnTile(indestructibleWallPrefab, borderObjects.transform, (int)topLeftWallGrid.x, (int)topLeftWallGrid.y);
+					spawnTileOutsideRoom(indestructibleWallPrefab, borderObjects.transform, (int)topLeftWallGrid.x, (int)topLeftWallGrid.y);
 				}
 				if (x == numXRooms-1) {
 					// Spawn a lower right wall if we're at the right
 					Vector2 bottomRightWallGrid = Tile.toGridCoord(roomRightX, roomBottomY);
-					Tile.spawnTile(indestructibleWallPrefab, borderObjects.transform, (int)bottomRightWallGrid.x, (int)bottomRightWallGrid.y);
+					spawnTileOutsideRoom(indestructibleWallPrefab, borderObjects.transform, (int)bottomRightWallGrid.x, (int)bottomRightWallGrid.y);
 				}
 				if (x == numXRooms-1 && y == numYRooms-1) {
 					// Spawn an upper right wall only if we're the upper right corner
 					Vector2 topRightWallGrid = Tile.toGridCoord(roomRightX, roomTopY);
-					Tile.spawnTile(indestructibleWallPrefab, borderObjects.transform, (int)topRightWallGrid.x, (int)topRightWallGrid.y);
+					spawnTileOutsideRoom(indestructibleWallPrefab, borderObjects.transform, (int)topRightWallGrid.x, (int)topRightWallGrid.y);
 				}
 
 				// Now spawn the walls and the transitions objects.
@@ -501,6 +501,17 @@ public class LevelGenerator : MonoBehaviour {
 		GameManager.instance.letterBox.activateLetterBox(letterBoxTop, letterBoxRight, letterBoxBottom, letterBoxLeft);
 
 
+	}
+
+	protected Tile spawnTileOutsideRoom(GameObject tilePrefab, Transform parentOfTile, int gridX, int gridY) {
+		GameObject tileObj = Instantiate(tilePrefab) as GameObject;
+		tileObj.transform.parent = parentOfTile;
+		Tile tile = tileObj.GetComponent<Tile>();
+		Vector2 tilePos = Tile.toLocalCoord(gridX, gridY);
+		tile.x = tilePos.x;
+		tile.y = tilePos.y;
+		tile.init();
+		return tile;
 	}
 
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rock : Tile {
+public class apt283Rock : Tile {
 
 	public float throwForce = 100f;
 
@@ -70,7 +70,7 @@ public class Rock : Tile {
 	}
 
 	void OnCollisionEnter2D(Collision2D collision) {
-		if (_isInAir && collision.gameObject.tag == "Tile") {
+		if (_isInAir && collision.gameObject.GetComponent<Tile>() != null) {
 			// First, make sure we're going fast enough to do damage
 			if (collision.relativeVelocity.magnitude <= damageThreshold) {
 				return;

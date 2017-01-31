@@ -34,7 +34,7 @@ public class apt283Sword : Tile {
 		swingPivot.transform.localPosition = Vector3.zero;
 		swingPivot.transform.localRotation = Quaternion.Euler(0, 0, _pivotStartAngle);
 		transform.parent = swingPivot;
-		transform.localPosition = new Vector3(1f, 0, 0);
+		transform.localPosition = new Vector3(1.2f, 0, 0);
 		transform.localRotation = Quaternion.Euler(0, 0, -90);
 
 
@@ -64,7 +64,7 @@ public class apt283Sword : Tile {
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
-		if (_swinging && other.gameObject.tag == "Tile") {
+		if (_swinging && other.gameObject.GetComponent<Tile>() != null) {
 			Tile otherTile = other.gameObject.GetComponent<Tile>();
 			if (otherTile != _tileHoldingUs && !otherTile.hasTag(TileTags.CanBeHeld)) {
 				otherTile.takeDamage(this, 1);

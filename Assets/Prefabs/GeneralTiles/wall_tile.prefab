@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114434666876605362}
   m_Layer: 0
   m_Name: wall_tile
-  m_TagString: Tile
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -68,9 +68,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tags: 1
+  tileName: 
   maxHealth: 1
   health: 1
   tileWereHolding: {fileID: 0}
+  aimDirection: {x: 0, y: 0}
 --- !u!212 &212269930273341580
 SpriteRenderer:
   m_ObjectHideFlags: 1

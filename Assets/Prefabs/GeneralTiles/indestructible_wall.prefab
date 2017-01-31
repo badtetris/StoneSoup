@@ -68,7 +68,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tags: 0
+  tileName: 
+  maxHealth: 1
+  health: 1
   tileWereHolding: {fileID: 0}
+  aimDirection: {x: 0, y: 0}
 --- !u!212 &212995114881643026
 SpriteRenderer:
   m_ObjectHideFlags: 1

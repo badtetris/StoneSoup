@@ -103,12 +103,8 @@ public class Player : Tile {
 		int numObjectsFound = _body.Cast(Vector2.zero, _maybeRaycastResults);
 		for (int i = 0; i < numObjectsFound && i < _maybeRaycastResults.Length; i++) {
 			RaycastHit2D result = _maybeRaycastResults[i];
-			if (result.transform.gameObject.tag != "Tile") {
-				continue;
-			}
 			Tile tileHit = result.transform.GetComponent<Tile>();
-			
-			if (tileHit.hasTag(TileTags.CanBeHeld)) {
+			if (tileHit != null && tileHit.hasTag(TileTags.CanBeHeld)) {
 				onItem = true;
 				if (tileWereHolding != null) {
 					break;
@@ -153,15 +149,11 @@ public class Player : Tile {
 				int numObjectsFound = _body.Cast(Vector2.zero, _maybeRaycastResults);
 				for (int i = 0; i < numObjectsFound && i < _maybeRaycastResults.Length; i++) {
 					RaycastHit2D result = _maybeRaycastResults[i];
-					if (result.transform.gameObject.tag != "Tile") {
-						continue;
-					}
 					Tile tileHit = result.transform.GetComponent<Tile>();
 					// Ignore the tile we just dropped
-					if (tileHit == _lastTileWeHeld) {
+					if (tileHit == null || tileHit == _lastTileWeHeld) {
 						continue;
 					}
-
 					if (tileHit.hasTag(TileTags.CanBeHeld)) {
 						tileHit.pickUp(this);
 						if (tileWereHolding != null) {
@@ -183,8 +175,8 @@ public class Player : Tile {
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {
-		if (other.gameObject.tag == "Tile") {
-			Tile otherTile = other.transform.GetComponent<Tile>();
+		Tile otherTile = other.transform.GetComponent<Tile>();
+		if (otherTile != null) {
 			if (otherTile.hasTag(TileTags.Exit)) {
 				GameManager.instance.playerJustWon();
 			}

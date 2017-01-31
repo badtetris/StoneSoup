@@ -197,6 +197,11 @@ public class Tile : MonoBehaviour {
 	}
 
 	public static Tile spawnTile(GameObject tilePrefab, Transform parentOfTile, int gridX, int gridY) {
+		// Enforce constraints on where we spawn tiles.
+		if (gridX < 0 || gridX >= LevelGenerator.ROOM_WIDTH || gridY < 0 || gridY >= LevelGenerator.ROOM_HEIGHT) {
+			throw new UnityException(string.Format("Attempted to spawn tile outside room boundaries. Tile: {0}, Grid X: {1}, Grid Y: {1}", tilePrefab, gridX, gridY));
+		}
+
 		GameObject tileObj = Instantiate(tilePrefab) as GameObject;
 		tileObj.transform.parent = parentOfTile;
 		Tile tile = tileObj.GetComponent<Tile>();

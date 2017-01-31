@@ -14,6 +14,6 @@ public class RoomAuthorText : MonoBehaviour {
 		
 	// Update is called once per frame
 	void Update () {
-		_text.text = string.Format("Current Room by: {0}", GameManager.instance.currentRoom.roomAuthor);
+		_text.text = string.Format("Room by: {0}", GameManager.instance.currentRoom.roomAuthor);
 	}
 }
