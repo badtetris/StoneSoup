@@ -53,6 +53,9 @@ public class Tile : MonoBehaviour {
 	public int maxHealth = 1;
 	public int health = 1;
 
+	public GameObject deathEffect;
+	public AudioClip deathSFX;
+
 
 	public bool hasTag(TileTags tag) {
 		return (tags & tag) != 0;	
@@ -127,6 +130,14 @@ public class Tile : MonoBehaviour {
 		if (tileWereHolding != null) {
 			tileWereHolding.dropped(this);
 		}
+		if (deathEffect != null) {
+			Instantiate(deathEffect, transform.position, Quaternion.identity);
+		}
+		if (deathSFX != null) {
+			AudioManager.playAudio(deathSFX);
+		}
+
+
 		Destroy(gameObject);
 	}
 

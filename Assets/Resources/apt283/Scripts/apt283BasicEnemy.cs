@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class apt283BasicEnemy : Tile {
 
-	public GameObject zapPrefab;
-
-
 	public float damageForce = 2000;
 
 	protected Vector2 _targetGridPos;
@@ -24,12 +21,6 @@ public class apt283BasicEnemy : Tile {
 
 
 	protected List<Vector2> _neighborPositions;
-
-	protected override void die() {
-		base.die();
-		Instantiate(zapPrefab, transform.position, Quaternion.identity);
-	}
-
 
 	void Start() {
 		_targetGridPos = Tile.toGridCoord(globalX, globalY);
