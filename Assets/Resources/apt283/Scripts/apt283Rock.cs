@@ -69,7 +69,7 @@ public class apt283Rock : Tile {
 		}
 	}
 
-	void OnCollisionEnter2D(Collision2D collision) {
+	public virtual void OnCollisionEnter2D(Collision2D collision) {
 		if (_isInAir && collision.gameObject.GetComponent<Tile>() != null) {
 			// First, make sure we're going fast enough to do damage
 			if (collision.relativeVelocity.magnitude <= damageThreshold) {

@@ -56,6 +56,9 @@ public class Tile : MonoBehaviour {
 	public GameObject deathEffect;
 	public AudioClip deathSFX;
 
+	public Vector2 heldOffset = new Vector2(0.2f, -0.1f);
+	public float heldAngle = 0f;
+
 
 	public bool hasTag(TileTags tag) {
 		return (tags & tag) != 0;	
@@ -150,7 +153,8 @@ public class Tile : MonoBehaviour {
 			_body.bodyType = RigidbodyType2D.Kinematic;
 		}
 		transform.parent = tilePickingUsUp.transform;
-		transform.localPosition = new Vector3(0.2f, -0.1f, -0.1f);
+		transform.localPosition = new Vector3(heldOffset.x, heldOffset.y, -0.1f);
+		transform.localRotation = Quaternion.Euler(0, 0, heldAngle);
 		removeTag(TileTags.CanBeHeld);
 		tilePickingUsUp.tileWereHolding = this;
 		_tileHoldingUs = tilePickingUsUp;
@@ -170,6 +174,7 @@ public class Tile : MonoBehaviour {
 		}
 		// We move ourselves to the current room when we're dropped
 		transform.localPosition = new Vector3(0.2f, -0.4f, -0.1f);
+		transform.localRotation = Quaternion.identity;
 		transform.parent = GameManager.instance.currentRoom.transform;
 		addTag(TileTags.CanBeHeld);
 		_tileHoldingUs.tileWereHolding = null;

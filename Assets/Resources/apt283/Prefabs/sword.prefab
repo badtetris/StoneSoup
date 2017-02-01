@@ -121,6 +121,10 @@ MonoBehaviour:
   tileName: Sword
   maxHealth: 1
   health: 1
+  deathEffect: {fileID: 0}
+  deathSFX: {fileID: 0}
+  heldOffset: {x: 0.4, y: 0.2}
+  heldAngle: -30
   tileWereHolding: {fileID: 0}
   aimDirection: {x: 0, y: 0}
   damageForce: 1000

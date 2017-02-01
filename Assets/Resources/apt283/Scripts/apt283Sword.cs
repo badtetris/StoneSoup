@@ -55,8 +55,8 @@ public class apt283Sword : Tile {
 			swingPivot.transform.localRotation = Quaternion.Euler(0, 0, _pivotStartAngle+_swingAngle);
 			if (_swingAngle >= 360) {
 				transform.parent = _tileHoldingUs.transform;
-				transform.localPosition = new Vector3(0.2f, -0.1f, -0.1f);
-				transform.localRotation = Quaternion.identity;
+				transform.localPosition = new Vector3(heldOffset.x, heldOffset.y, -0.1f);
+				transform.localRotation = Quaternion.Euler(0, 0, heldAngle);
 				swingPivot.transform.parent = transform;
 				_swinging = false;
 			}
