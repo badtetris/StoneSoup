@@ -2,22 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// An example of a simple room generator.
+// Walls are spawned randomly (unless an exit is required)
+// Also spawns a random number of normal rocks and basic enemies.
 public class apt283Room : Room {
 
+	// The room needs references to the things it can spawn.
 	public GameObject rockPrefab;
 	public GameObject enemyPrefab;
 
-	public int minNumRocks = 0, maxNumRocks = 6;
+	public int minNumRocks = 4, maxNumRocks = 14;
 	public int minNumEnemies = 1, maxNumEnemies = 4;
 
-
-	public float borderWallProbability = 0.9f;
-
-
+	// Chance a wall
+	public float borderWallProbability = 0.7f;
 
 
 	public override void generateRoom(LevelGenerator ourGenerator, params Dir[] requiredExits) {
-		// Choose which generation method to do
+		// It's very likely you'll want to do different generation methods depending on which required exits you receive
+		// Here's an example of randomly choosing between two generation methods.
 		if (Random.value <= 0.5f) {
 			roomGenerationVersionOne(ourGenerator, requiredExits);
 		}		
@@ -67,7 +70,7 @@ public class apt283Room : Room {
 				}
 			}
 			if (possibleSpawnPositions.Count > 0) {
-				Vector2 spawnPos = GlobalFuncs.getRandom(possibleSpawnPositions);
+				Vector2 spawnPos = GlobalFuncs.randElem(possibleSpawnPositions);
 				Tile.spawnTile(rockPrefab, transform, (int)spawnPos.x, (int)spawnPos.y);
 				occupiedPositions[(int)spawnPos.x, (int)spawnPos.y] = true;
 			}
@@ -83,7 +86,7 @@ public class apt283Room : Room {
 				}
 			}
 			if (possibleSpawnPositions.Count > 0) {
-				Vector2 spawnPos = GlobalFuncs.getRandom(possibleSpawnPositions);
+				Vector2 spawnPos = GlobalFuncs.randElem(possibleSpawnPositions);
 				Tile.spawnTile(enemyPrefab, transform, (int)spawnPos.x, (int)spawnPos.y);
 				occupiedPositions[(int)spawnPos.x, (int)spawnPos.y] = true;
 			}
@@ -144,7 +147,8 @@ public class apt283Room : Room {
 
 
 
-
+	// Simple utility function because I didn't bother looking up a more general Contains function for arrays.
+	// Whoops.
 	protected bool containsDir (Dir[] dirArray, Dir dirToCheck) {
 		foreach (Dir dir in dirArray) {
 			if (dirToCheck == dir) {

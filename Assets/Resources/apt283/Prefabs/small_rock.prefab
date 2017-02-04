@@ -92,8 +92,13 @@ MonoBehaviour:
   tileName: Rock
   maxHealth: 1
   health: 1
+  deathEffect: {fileID: 0}
+  deathSFX: {fileID: 0}
+  heldOffset: {x: 0.2, y: -0.1}
+  heldAngle: 0
   tileWereHolding: {fileID: 0}
   aimDirection: {x: 0, y: 0}
+  throwSound: {fileID: 8300000, guid: 2940c3ebcb86849aa84a3ff4b1bf2a46, type: 3}
   throwForce: 3000
   onGroundThreshold: 0.8
   damageThreshold: 14

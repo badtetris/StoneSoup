@@ -2,22 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// A version of the rock that causes explosions when it hits things.
 public class apt283ExplosiveRock : apt283Rock {
 
-	public float explosionRadius = 1.125f;
+	public float explosionRadius = 2f;
 	public float explosionForce = 2000;
 
-	protected bool _alive = true;
-
-	public override void takeDamage(Tile tileDamagingUs, int amount, DamageType damageType) {
-		if (!_alive) {
-			return;
-		}
-		base.die();
-	}
-
+	// When we die, we cause an explosion that does explosive damage to a surrounding radius.
 	protected override void die() {
-		_alive = false;
 		// Create an explosion that covers a relatively large circle
 		Collider2D[] maybeColliders = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
 		foreach (Collider2D maybeCollider in maybeColliders) {

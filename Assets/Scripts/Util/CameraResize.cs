@@ -17,10 +17,10 @@ public class CameraResize : MonoBehaviour {
 		setCameraSize();
 	}
 
-
-	void setCameraSize () {
+	// We try to set our camera to be the best integer scale of our scaleOneSize.
+	protected void setCameraSize () {
 		Camera camera = GetComponent<Camera>();
-		// Let's figure out what our desired screen scale is. 
+
 		float screenWidth = Screen.width;
 		float screenHeight = Screen.height;
 		

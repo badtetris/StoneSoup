@@ -99,12 +99,13 @@ MonoBehaviour:
   heldAngle: 0
   tileWereHolding: {fileID: 0}
   aimDirection: {x: 0, y: 0}
+  throwSound: {fileID: 8300000, guid: 2940c3ebcb86849aa84a3ff4b1bf2a46, type: 3}
   throwForce: 3000
   onGroundThreshold: 0.8
   damageThreshold: 14
   damageForce: 1000
   afterThrowTime: 0.2
-  explosionRadius: 2.4
+  explosionRadius: 2
   explosionForce: 2000
 --- !u!212 &212227872059390898
 SpriteRenderer:

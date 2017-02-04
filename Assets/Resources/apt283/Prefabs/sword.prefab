@@ -127,6 +127,8 @@ MonoBehaviour:
   heldAngle: -30
   tileWereHolding: {fileID: 0}
   aimDirection: {x: 0, y: 0}
+  swingSound: {fileID: 8300000, guid: 2940c3ebcb86849aa84a3ff4b1bf2a46, type: 3}
+  pickupSound: {fileID: 8300000, guid: dfe16fea35feb447e898a0aea7791dfb, type: 3}
   damageForce: 1000
   swingSpeed: 1440
   swingPivot: {fileID: 4604770428556258}

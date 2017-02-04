@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// The level generator is where the magic happens. 
+// Don't worry too much about this implementation.
+// The one property you need to pay attention to is the netIDs list 
+// as you'll need to put your netID in there to have your rooms be part of the generation.
 public class LevelGenerator : MonoBehaviour {
 
 	public const int ROOM_WIDTH = 10;
@@ -9,26 +13,33 @@ public class LevelGenerator : MonoBehaviour {
 
 	public const int LOCAL_START_INDEX = 4;
 
+	public string[] netIDs;
+
+	// For now, we use default rooms for the start and the exit.
+	// This helps ensure only one room will generate a player (at the start)
+	// and an exit (at the exit)
 	public GameObject startRoomPrefab;
 	public GameObject exitRoomPrefab;
 
-	public string[] netIDs;
-
-
+	// Used by the default room generation implementation to map indices to tile prefabs.
 	public GameObject[] globalTilePrefabs;
 
+	// The normal wall tile.
 	public GameObject normalWallPrefab;
 
+	// Used to create the border objects (including the transition objects if we're generating in single room mode)
 	public GameObject verticalTransitionPrefab;
 	public GameObject verticalBorderWallPrefab;
 	public GameObject horizontalTransitionPrefab;
 	public GameObject horizontalBorderWallPrefab;
 	public GameObject indestructibleWallPrefab;
 
+	// How many rooms we have in each dimension.
 	public int numXRooms = 4;
 	public int numYRooms = 4;
 
-
+	// We use a "bag" system similar to how tetris pieces are chosen to select which netID will 
+	// generate the next room. 
 	protected string[] _netIDBag = null;
 	protected int _currentBagIndex = 0;
 
@@ -41,7 +52,6 @@ public class LevelGenerator : MonoBehaviour {
 		_currentBagIndex = 0;
 	}
 
-
 	protected GameObject nextRoomToSpawn() {
 		if (_netIDBag == null || _currentBagIndex >= _netIDBag.Length) {
 			createNewNetIDBag();
@@ -53,6 +63,7 @@ public class LevelGenerator : MonoBehaviour {
 		return Resources.Load<GameObject>(roomPath); 
 	}
 
+	// The function called by the GameManager to actually generate the level.
 	public virtual void generateLevel() {
 		if (GameManager.gameMode == GameManager.GameMode.SingleRoom) {
 			generateSingleRoomModeLevel();
@@ -63,20 +74,7 @@ public class LevelGenerator : MonoBehaviour {
 		}
 	}
 
-	protected Dir oppositeDir(Dir dir) {
-		if (dir == Dir.Up) {
-			return Dir.Down;
-		}
-		else if (dir == Dir.Right) {
-			return Dir.Left;
-		}
-		else if (dir == Dir.Down) {
-			return Dir.Up;
-		}
-		else {
-			return Dir.Right;
-		}
-	}
+	
 
 	public virtual void generateCombinedRoomModeLevel() {
 		float totalRoomWidth = Tile.TILE_SIZE*ROOM_WIDTH;
@@ -94,12 +92,14 @@ public class LevelGenerator : MonoBehaviour {
 
 
 		Dir[] possibleDirsToPath = new Dir[] { Dir.Left, Dir.Left, Dir.Right, Dir.Right, Dir.Up };
-		Dir currentDir = GlobalFuncs.getRandom(possibleDirsToPath);
+		Dir currentDir = GlobalFuncs.randElem(possibleDirsToPath);
 		Dir entranceDir = oppositeDir(currentDir);
 		// Keep going in our current direction until we hit a will
 		bool makingCriticalPath = true;
 		GameObject roomToSpawn = startRoomPrefab;
 
+		// This is based on Spelunky's method of building a critical path.
+		// This code is kind of a mess and could likely be easily improved.=
 		while (makingCriticalPath) {
 			// Let's figure out what our required exits are going to be.
 			Dir exitDir = Dir.Up;
@@ -111,7 +111,7 @@ public class LevelGenerator : MonoBehaviour {
 				}
 				else {
 					exitDir = Dir.Up;
-					currentDir = GlobalFuncs.getRandom(new Dir[] { Dir.Left, Dir.Right });
+					currentDir = GlobalFuncs.randElem(new Dir[] { Dir.Left, Dir.Right });
 					nextRoomY++;
 				}
 			}
@@ -265,8 +265,8 @@ public class LevelGenerator : MonoBehaviour {
 
 			// Now we have a list of tiles, let's randomly shuffle their locations.
 			for (int i = 0; i < tilesToRearrange.Count*4; i++) {
-				Tile tile1 = GlobalFuncs.getRandom(tilesToRearrange);
-				Tile tile2 = GlobalFuncs.getRandom(tilesToRearrange);
+				Tile tile1 = GlobalFuncs.randElem(tilesToRearrange);
+				Tile tile2 = GlobalFuncs.randElem(tilesToRearrange);
 
 				Transform tile1OldParent = tile1.transform.parent;
 				Vector2 tile1OldPosition = tile1.transform.localPosition;
@@ -287,9 +287,6 @@ public class LevelGenerator : MonoBehaviour {
 	}
 
 	public virtual void generateSingleRoomModeLevel() {
-		// We work by spawning rooms, positioning them, and having the rooms generate their items.
-
-
 		// We add 2 to the tile width/height here to make room for the padding areas.
 		float totalRoomWidth = (Tile.TILE_SIZE)*(ROOM_WIDTH+1);
 		float totalRoomHeight = (Tile.TILE_SIZE)*(ROOM_HEIGHT+1);
@@ -306,7 +303,7 @@ public class LevelGenerator : MonoBehaviour {
 
 
 		Dir[] possibleDirsToPath = new Dir[] { Dir.Left, Dir.Left, Dir.Right, Dir.Right, Dir.Up };
-		Dir currentDir = GlobalFuncs.getRandom(possibleDirsToPath);
+		Dir currentDir = GlobalFuncs.randElem(possibleDirsToPath);
 		Dir entranceDir = oppositeDir(currentDir);
 		// Keep going in our current direction until we hit a will
 		bool makingCriticalPath = true;
@@ -323,7 +320,7 @@ public class LevelGenerator : MonoBehaviour {
 				}
 				else {
 					exitDir = Dir.Up;
-					currentDir = GlobalFuncs.getRandom(new Dir[] { Dir.Left, Dir.Right });
+					currentDir = GlobalFuncs.randElem(new Dir[] { Dir.Left, Dir.Right });
 					nextRoomY++;
 				}
 			}
@@ -503,19 +500,35 @@ public class LevelGenerator : MonoBehaviour {
 
 	}
 
+
+	// Utility functions used by the generator.
+
 	protected Tile spawnTileOutsideRoom(GameObject tilePrefab, Transform parentOfTile, int gridX, int gridY) {
 		GameObject tileObj = Instantiate(tilePrefab) as GameObject;
 		tileObj.transform.parent = parentOfTile;
 		Tile tile = tileObj.GetComponent<Tile>();
-		Vector2 tilePos = Tile.toLocalCoord(gridX, gridY);
-		tile.x = tilePos.x;
-		tile.y = tilePos.y;
+		Vector2 tilePos = Tile.toWorldCoord(gridX, gridY);
+		tile.localX = tilePos.x;
+		tile.localY = tilePos.y;
 		tile.init();
 		return tile;
 	}
 
 
-
+	protected Dir oppositeDir(Dir dir) {
+		if (dir == Dir.Up) {
+			return Dir.Down;
+		}
+		else if (dir == Dir.Right) {
+			return Dir.Left;
+		}
+		else if (dir == Dir.Down) {
+			return Dir.Up;
+		}
+		else {
+			return Dir.Right;
+		}
+	}
 
 	
 }

@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//
+// The Room class is the parent of your room generators.
+//
 public class Room : MonoBehaviour {
 
+	// Set this value to let everyone know who made the current room. 
 	public string roomAuthor = "";
 
+	// The default room implementation uses a simple text file 
+	// To spawn a set of designed prefabs. 
 	public TextAsset designedRoomFile;
-
 	public GameObject[] localTilePrefabs;
 
 	// Used by single room mode for centering the camera properly
@@ -18,12 +23,17 @@ public class Room : MonoBehaviour {
 		}
 	}
 
-	// This will be set by the level generator. Don't touch it if you don't want to break everything lol.
+	// This will be set by the level generator. Don't touch it yourself.
 	[HideInInspector]
 	public int roomGridX, roomGridY;
 
 
+	// The generateRoom function is the one you'll need to override to generator your rooms.
+	// It takes the LevelGenerator as a parameter so you have access to more global prefabs (like walls)
+	// Additionaly, it takes an array of exits that need to exist (your room will have required exits if it's on the critical path).
+	// For an exit to "exist", there can't be a wall in the center part of that edge of the room.
 
+	// This implementation pulls a designed room out of a text file.
 	public virtual void generateRoom(LevelGenerator ourGenerator, params Dir[] requiredExits) {
 
 		string initialGridString = designedRoomFile.text;

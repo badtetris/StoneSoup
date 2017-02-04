@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class GameOverScene : MonoBehaviour {
 
+	public AudioClip clickSound;
+
 	public Text numLevelsCompletedText;
 
 	void Start() {
@@ -13,11 +15,13 @@ public class GameOverScene : MonoBehaviour {
 	}
 
 	public void tryAgain() {
+		AudioManager.playAudio(clickSound);
 		GameManager.levelNumber = 0;
 		SceneManager.LoadScene("PlayScene");
 	}
 
 	public void returnToMenu() {
+		AudioManager.playAudio(clickSound);
 		GameManager.levelNumber = 0;
 		SceneManager.LoadScene("MainMenuScene");
 	}

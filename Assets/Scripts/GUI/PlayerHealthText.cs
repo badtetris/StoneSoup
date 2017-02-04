@@ -15,7 +15,7 @@ public class PlayerHealthText : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Player.instance != null) {
-			_text.text = string.Format("Health: {0}/{1}", Player.instance.health, Player.instance.maxHealth);
+			_text.text = string.Format("Health: {0}", Player.instance.health);
 		}
 	}
 }

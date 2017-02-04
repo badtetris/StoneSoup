@@ -2,17 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 
-
-
-// Some nice static util functions
+// Some nice static util functions. Should look familiar from lecture.
 public class GlobalFuncs {
 	
 	// Utility functions for choosing randomly from arrays and lists and the like 
-	public static T getRandom<T>(T[] array) { 
+	public static T randElem<T>(T[] array) { 
 		return array[Random.Range(0, array.Length)];
 	}
 	
-	public static T getRandom<T>(List<T> list)  { 
+	public static T randElem<T>(List<T> list)  { 
 		return list[Random.Range(0, list.Count)];
 	}
 	

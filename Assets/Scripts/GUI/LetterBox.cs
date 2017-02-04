@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// UI Element to hide everything besides the current room in single room mode.
 public class LetterBox : MonoBehaviour {
 
 	public SpriteRenderer topSquare, rightSquare, bottomSquare, leftSquare;

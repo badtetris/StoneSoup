@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Another example of room generation.
+// This one generates walls in the center as well as around the border.
+// Also spawns miscellaneous objects.
+// This room is a good candidate for testing out Tiles as you make them.
 public class fakeNetIDRoom : Room {
 
-	public GameObject bananaPrefab;
+	public GameObject tilePrefab;
 
-	public int minNumBananas = 0, maxNumBananas = 1;
+	public int minNumTiles = 1, maxNumTiles = 3;
 
 	public float borderWallProbability = 0.9f;
 	public float centerWallProbability = 0.9f;
@@ -71,9 +75,10 @@ public class fakeNetIDRoom : Room {
 			}
 		}
 
+		// Now spawn our miscallaneous tiles.
 		List<Vector2> possibleSpawnPositions = new List<Vector2>(LevelGenerator.ROOM_WIDTH*LevelGenerator.ROOM_HEIGHT);
-		int numBananas = Random.Range(minNumBananas, maxNumBananas+1);
-		for (int i = 0; i < numBananas; i++) {
+		int numTiles = Random.Range(minNumTiles, maxNumTiles+1);
+		for (int i = 0; i < numTiles; i++) {
 			possibleSpawnPositions.Clear();
 			for (int x = 0; x < LevelGenerator.ROOM_WIDTH; x++) {
 				for (int y = 0; y < LevelGenerator.ROOM_HEIGHT; y++) {
@@ -84,8 +89,8 @@ public class fakeNetIDRoom : Room {
 				}
 			}
 			if (possibleSpawnPositions.Count > 0) {
-				Vector2 spawnPos = GlobalFuncs.getRandom(possibleSpawnPositions);
-				Tile.spawnTile(bananaPrefab, transform, (int)spawnPos.x, (int)spawnPos.y);
+				Vector2 spawnPos = GlobalFuncs.randElem(possibleSpawnPositions);
+				Tile.spawnTile(tilePrefab, transform, (int)spawnPos.x, (int)spawnPos.y);
 				occupiedPositions[(int)spawnPos.x, (int)spawnPos.y] = true;
 			}
 		}
