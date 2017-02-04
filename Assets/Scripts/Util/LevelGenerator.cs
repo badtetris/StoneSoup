@@ -220,6 +220,23 @@ public class LevelGenerator : MonoBehaviour {
 				float roomBottomY = totalRoomHeight*y-Tile.TILE_SIZE/2;
 				float roomTopY = totalRoomHeight*(y+1)+Tile.TILE_SIZE/2;
 
+				if (x == 0 && y == 0) {
+					Vector2 bottomLeftWallGrid = Tile.toGridCoord(roomLeftX, roomBottomY);
+					spawnTileOutsideRoom(indestructibleWallPrefab, borderObjects.transform, (int)bottomLeftWallGrid.x, (int)bottomLeftWallGrid.y);
+				}
+				if (x == 0 && y == numYRooms-1) {
+					Vector2 topLeftWallGrid = Tile.toGridCoord(roomLeftX, roomTopY);
+					spawnTileOutsideRoom(indestructibleWallPrefab, borderObjects.transform, (int)topLeftWallGrid.x, (int)topLeftWallGrid.y);
+				}
+				if (x == numXRooms-1 && y == numYRooms-1) {
+					Vector2 topRightWallGrid = Tile.toGridCoord(roomRightX, roomTopY);
+					spawnTileOutsideRoom(indestructibleWallPrefab, borderObjects.transform, (int)topRightWallGrid.x, (int)topRightWallGrid.y);
+				}
+				if (x == numXRooms-1 && y == 0) {
+					Vector2 bottomRightWallGrid = Tile.toGridCoord(roomRightX, roomBottomY);
+					spawnTileOutsideRoom(indestructibleWallPrefab, borderObjects.transform, (int)bottomRightWallGrid.x, (int)bottomRightWallGrid.y);
+				}
+
 				if (x == 0) {
 					GameObject wallObj = Instantiate(verticalBorderWallPrefab) as GameObject;
 					wallObj.transform.parent = borderObjects.transform;

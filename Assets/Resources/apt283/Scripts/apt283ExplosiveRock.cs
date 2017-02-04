@@ -10,6 +10,7 @@ public class apt283ExplosiveRock : apt283Rock {
 
 	// When we die, we cause an explosion that does explosive damage to a surrounding radius.
 	protected override void die() {
+		_alive = false;
 		// Create an explosion that covers a relatively large circle
 		Collider2D[] maybeColliders = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
 		foreach (Collider2D maybeCollider in maybeColliders) {
