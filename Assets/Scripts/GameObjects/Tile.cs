@@ -15,7 +15,11 @@ public enum TileTags {
 	Enemy = 0x10,
 	Friendly = 0x20,
 	Weapon = 0x40,
-	Exit = 0x80
+	Exit = 0x80,
+	Consumable = 0x100,
+	Wearable = 0x200,
+	Money = 0x400,
+	Dateable = 0x800
 }
 
 // The two damage types available to us.
