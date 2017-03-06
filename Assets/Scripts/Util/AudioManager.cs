@@ -51,5 +51,20 @@ public class AudioManager {
 		return false;
 	}
 
+	public static bool stopAudio(AudioClip audio) {
+		maybeInitInstance();
+		return _instance.instanceStopAudio(audio);
+	}
+
+	public bool instanceStopAudio(AudioClip audio) {
+		foreach (AudioSource maybeSource in _audioSources) {
+			if (maybeSource.isPlaying && maybeSource.clip == audio) {
+				maybeSource.Stop();
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 }
