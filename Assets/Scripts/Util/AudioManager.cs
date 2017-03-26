@@ -11,6 +11,9 @@ public class AudioManager {
 
 
 	protected static AudioManager _instance = null;
+	public static AudioManager instance {
+		get { return _instance; }
+	}
 	protected static void maybeInitInstance() {
 		if (_instance == null) {
 			_instance = new AudioManager();
@@ -30,6 +33,23 @@ public class AudioManager {
 			newSource.playOnAwake = false;
 			_audioSources[i] = newSource;
 		}
+		_audioObj.AddComponent<AudioManagerUpdater>();
+	}
+
+	public void updateAudioLevels() {
+		int numAudioPlaying = 0;
+		foreach (AudioSource source in _audioSources) {
+			if (source.isPlaying) {
+				numAudioPlaying++;
+			}
+		}
+		float volume = 1f / (float)numAudioPlaying;
+		foreach (AudioSource source in _audioSources) {
+			if (source.isPlaying) {
+				source.volume = volume;
+			}
+		}
+
 	}
 
 	// The function you should use to play audio.

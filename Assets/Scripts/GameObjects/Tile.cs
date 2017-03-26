@@ -276,7 +276,7 @@ public class Tile : MonoBehaviour {
 		// We move ourselves to the current room when we're dropped
 		transform.localPosition = new Vector3(0.2f, -0.4f, -0.1f);
 		transform.localRotation = Quaternion.identity;
-		transform.parent = GameManager.instance.currentRoom.transform;
+		transform.parent = tileDroppingUs.transform.parent;
 		addTag(TileTags.CanBeHeld);
 		_tileHoldingUs.tileWereHolding = null;
 		_tileHoldingUs = null;

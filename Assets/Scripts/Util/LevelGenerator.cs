@@ -13,7 +13,7 @@ public class LevelGenerator : MonoBehaviour {
 
 	public const int LOCAL_START_INDEX = 4;
 
-	public string[] netIDs;
+	//public string[] netIDs;
 
 	// For now, we use default rooms for the start and the exit.
 	// This helps ensure only one room will generate a player (at the start)
@@ -40,23 +40,23 @@ public class LevelGenerator : MonoBehaviour {
 
 	// We use a "bag" system similar to how tetris pieces are chosen to select which netID will 
 	// generate the next room. 
-	protected string[] _netIDBag = null;
+	protected string[] _IDBag = null;
 	protected int _currentBagIndex = 0;
 
-	protected void createNewNetIDBag() {
-		_netIDBag = new string[netIDs.Length*2];
-		for (int i = 0; i < _netIDBag.Length; i++) {
-			_netIDBag[i] = netIDs[i % netIDs.Length];
+	protected void createNewIDBag() {
+		_IDBag = new string[ContributorList.instance.activeContributorIDs.Length*2];
+		for (int i = 0; i < _IDBag.Length; i++) {
+			_IDBag[i] = ContributorList.instance.activeContributorIDs[i % ContributorList.instance.activeContributorIDs.Length];
 		}
-		GlobalFuncs.shuffle(_netIDBag);
+		GlobalFuncs.shuffle(_IDBag);
 		_currentBagIndex = 0;
 	}
 
 	protected GameObject nextRoomToSpawn() {
-		if (_netIDBag == null || _currentBagIndex >= _netIDBag.Length) {
-			createNewNetIDBag();
+		if (_IDBag == null || _currentBagIndex >= _IDBag.Length) {
+			createNewIDBag();
 		}
-		string netID = _netIDBag[_currentBagIndex];
+		string netID = _IDBag[_currentBagIndex];
 		_currentBagIndex++;
 
 		string roomPath = string.Format("{0}/room", netID);
@@ -65,6 +65,8 @@ public class LevelGenerator : MonoBehaviour {
 
 	// The function called by the GameManager to actually generate the level.
 	public virtual void generateLevel() {
+		createNewIDBag();
+
 		if (GameManager.gameMode == GameManager.GameMode.SingleRoom) {
 			generateSingleRoomModeLevel();
 		}

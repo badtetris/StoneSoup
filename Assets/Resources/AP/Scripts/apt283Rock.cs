@@ -60,7 +60,7 @@ public class apt283Rock : Tile {
 
 		// Have to do some book keeping similar to when we're dropped.
 		_body.bodyType = RigidbodyType2D.Dynamic;
-		transform.parent = GameManager.instance.currentRoom.transform;
+		transform.parent = tileUsingUs.transform.parent;
 		_tileHoldingUs.tileWereHolding = null;
 		_tileHoldingUs = null;
 

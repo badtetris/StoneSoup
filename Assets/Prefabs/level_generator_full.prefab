@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4791762480987512}
   - component: {fileID: 114918456137113632}
   m_Layer: 0
-  m_Name: level_generator
+  m_Name: level_generator_full
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,6 +54,18 @@ MonoBehaviour:
   netIDs:
   - apt283
   - fakeNetID
+  - ay852
+  - cdh343
+  - gw805
+  - kt1556
+  - mcr431
+  - mjm973
+  - ayl292
+  - bgh252
+  - ccs403
+  - er1922
+  - sc4438-1
+  - tjt288
   startRoomPrefab: {fileID: 1335745978078546, guid: 850bb3f83990641f6a1be4624fc1e67e,
     type: 2}
   exitRoomPrefab: {fileID: 1335745978078546, guid: cb9529cb24460473b9be220b40230951,

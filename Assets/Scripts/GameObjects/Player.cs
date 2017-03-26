@@ -134,6 +134,10 @@ public class Player : Tile {
 
 	void Update() {
 
+		if (GameManager.instance.gameIsOver) {
+			return;
+		}
+			
 		// Update our aim direction
 		Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 		Vector2 toMouse = (mousePosition - (Vector2)transform.position).normalized;
