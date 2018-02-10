@@ -15,7 +15,7 @@ public class fakeNetIDRoom : Room {
 	public float borderWallProbability = 0.9f;
 	public float centerWallProbability = 0.9f;
 
-	public override void generateRoom(LevelGenerator ourGenerator, params Dir[] requiredExits) {
+	public override void fillRoom(LevelGenerator ourGenerator, params Dir[] requiredExits) {
 		// Basically we go over the border and determining where to spawn walls.
 		bool[,] wallMap = new bool[LevelGenerator.ROOM_WIDTH, LevelGenerator.ROOM_HEIGHT];
 		for (int x = 0; x < LevelGenerator.ROOM_WIDTH; x++) {

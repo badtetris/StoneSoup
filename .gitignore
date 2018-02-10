@@ -6,6 +6,9 @@ Library/*
 Publish/*
 Temp/*
 Screenshots/*
+obj/*
+UnityPackageManager/*
+Video/*
 *.userprefs
 *.unityproj
 *.sublime-project

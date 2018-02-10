@@ -18,7 +18,7 @@ public class apt283Room : Room {
 	public float borderWallProbability = 0.7f;
 
 
-	public override void generateRoom(LevelGenerator ourGenerator, params Dir[] requiredExits) {
+	public override void fillRoom(LevelGenerator ourGenerator, params Dir[] requiredExits) {
 		// It's very likely you'll want to do different generation methods depending on which required exits you receive
 		// Here's an example of randomly choosing between two generation methods.
 		if (Random.value <= 0.5f) {

@@ -188,8 +188,8 @@ public class Tile : MonoBehaviour {
 	// We use this instead of the Unity-defined Start or Awake because we have extremely precise
 	// control over when it's called (for instance, if we just instantiated a tile, Start won't be called until after our current code compeletes, etc.)
 	public virtual void init() {
-		_sprite = GetComponent<SpriteRenderer>();
-		_anim = GetComponent<Animator>();
+		_sprite = GetComponentInChildren<SpriteRenderer>();
+		_anim = GetComponentInChildren<Animator>();
 		if (hasTag(TileTags.Creature) && GetComponent<Rigidbody2D>() == null) {
 			_body = gameObject.AddComponent<Rigidbody2D>();
 		}
@@ -289,6 +289,20 @@ public class Tile : MonoBehaviour {
 
 	}
 
+	// This is a function you can override to respond to messages from a
+	// DetectTile object
+	// Example: An enemy has a child object that's listening for approaching friendly objects.
+	// When a friendly object entres the trigger, it informs it's parent tile that an object was detected by using
+	// this function.
+	public virtual void tileDetected(Tile detectedTile) {
+
+	}
+
+	// Similarly, when we can no longer detect a tile. 
+	public virtual void tileNoLongerDetected(Tile detectedTile) {
+		
+	}
+
 
 	/////////////////////////////////
 
@@ -320,10 +334,100 @@ public class Tile : MonoBehaviour {
 		return new Vector2(x*TILE_SIZE + TILE_SIZE/2, y*TILE_SIZE + TILE_SIZE/2);
 	}
 
+	// Vector version
+	public static Vector2 toWorldCoord(Vector2 gridCoord) {
+		return new Vector2(gridCoord.x*TILE_SIZE + TILE_SIZE/2, gridCoord.y*TILE_SIZE + TILE_SIZE/2);
+	}
+
+
 	// Sometimes your tile will want to be able to snap to specific grid locations (such as the basic enemies).
 	// This tile will convert world coordinates to grid coordinates.
 	public static Vector2 toGridCoord(float x, float y) {
 		return new Vector2(Mathf.Floor(x / TILE_SIZE), Mathf.Floor(y / TILE_SIZE));
+	}
+
+	// Vector2 version
+	public static Vector2 toGridCoord(Vector2 worldCoord) {
+		return new Vector2(Mathf.Floor(worldCoord.x / TILE_SIZE), Mathf.Floor(worldCoord.y / TILE_SIZE));
+	}
+
+
+	// Some delegate types. 
+	public delegate bool CanOverlapFunc(RaycastHit2D hitResult);
+
+	protected bool DefaultCanOverlapFunc(RaycastHit2D hitResult) {
+		if (hitResult.collider.isTrigger) {
+			return true;
+		}
+		Tile maybeResultTile = hitResult.transform.GetComponent<Tile>();
+		if (maybeResultTile != null) {
+			if (maybeResultTile == this) {
+				return true;
+			}
+			if (maybeResultTile.hasTag(TileTags.Wall | TileTags.Creature | TileTags.Exit)) {
+				return false;
+			}
+		}
+		else {
+			return false; // By default any solid collider that isn't a tile is something we can't overlap with.
+		}
+		return true;
+	}
+
+	// This function tells you if a path between you and a target point is clear of obstacles. 
+	// Super useful for coding up some basic AI for tiles. 
+	// What counts as an "Obstacle?" That's where the optional "CanOverlapFunc" comes in. 
+	protected bool pathIsClear(Vector2 target, CanOverlapFunc canOverlapFunc=null) {
+		if (canOverlapFunc == null) {
+			canOverlapFunc = DefaultCanOverlapFunc; // Default function for checking overlaps. 
+		}
+		Vector2 toTarget = target-(Vector2)transform.position;
+		float distanceToTarget = toTarget.magnitude;
+		toTarget.Normalize();
+		// We use our existing _maybeRaycastResults array to avoid allocating a new array. 
+		if (_maybeRaycastResults == null) {
+			_maybeRaycastResults = new RaycastHit2D[10];
+		}
+
+		// Now we perform a collider "Cast" i.e. we simulate moving our collider forward along the path from us to our target. 
+		// Any objects that the physics engine detects as collider with this simulated collider will be stored in _maybeRaycastResults
+
+		// This is a kinda weird way of handling this. The Cast function returns an int instead of just returning the array of results (i.e. the thing we actually care about).
+		// Why is it like this? Short answer is for performance. 
+		int numCollisions = _collider.Cast(toTarget, _maybeRaycastResults, distanceToTarget);
+		for (int i = 0; i < numCollisions && i < _maybeRaycastResults.Length; i++) {
+			if (!canOverlapFunc(_maybeRaycastResults[i])) {
+				return false;
+			}
+		}	
+		// If we can overlap with all of the possible barriers, then the path is clear!
+		return true;
+	}
+
+	// This function tells you if a target tile is "visible"
+	// i.e. it casts a ray from your position to the target.
+	// If nothing interrupts the ray, it decides you can "see" the target
+	// Not perfect for all situations, but it should be useful most of the time.
+	protected bool canSeeTile(Tile target) {
+		Vector2 toTarget = target.transform.position - transform.position;
+		float distancetoTarget = toTarget.magnitude;
+		toTarget.Normalize();
+
+		if (_maybeRaycastResults == null) {
+			_maybeRaycastResults = new RaycastHit2D[10];
+		}
+		int numCollisions = Physics2D.RaycastNonAlloc(transform.position, toTarget, _maybeRaycastResults, distancetoTarget);
+		for (int i = 0; i < numCollisions && i < _maybeRaycastResults.Length; i++) {
+			RaycastHit2D result = _maybeRaycastResults[i];
+			if (result.collider.isTrigger
+				|| result.transform == transform
+				|| result.transform == target.transform) {
+				continue;
+			}
+			Debug.Log(result.transform);
+			return false;
+		}
+		return true;
 	}
 
 

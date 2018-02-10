@@ -36,6 +36,26 @@ public class apt283BasicEnemy : Tile {
 	// To avoid constantly making a new List data structure, we keep the same list for checking our neighbor positions
 	protected List<Vector2> _neighborPositions;
 
+	public TileTags tagsWeAttack = TileTags.Friendly;
+
+	// Occasionally we'll start with a weapon pre-spawned on top of us. 
+	public GameObject[] maybeWeaponsToStartWith;
+
+	public override void init() {
+		base.init();
+
+		// Here's where we spawn a random weapon for us. 
+		if (maybeWeaponsToStartWith != null && maybeWeaponsToStartWith.Length > 0) {
+			GameObject maybeWeaponPrefab = GlobalFuncs.randElem(maybeWeaponsToStartWith);
+			if (maybeWeaponPrefab != null) {
+				Vector2 ourGridPos = toGridCoord(localX, localY);
+				Tile.spawnTile(maybeWeaponPrefab, transform.parent, (int)ourGridPos.x, (int)ourGridPos.y);
+			}
+		}
+	}
+
+
+
 	void Start() {
 		_targetGridPos = Tile.toGridCoord(globalX, globalY);
 		_nextMoveCounter = Random.Range(timeBetweenMovesMin, timeBetweenMovesMax);
@@ -64,19 +84,19 @@ public class apt283BasicEnemy : Tile {
 			// We test neighbor locations by casting in specific directions. 
 
 			Vector2 upGridNeighbor = new Vector2(_targetGridPos.x, _targetGridPos.y+1);
-			if (isValidMoveDir(Vector2.up)) {
+			if (pathIsClear(toWorldCoord(upGridNeighbor))) {
 				_neighborPositions.Add(upGridNeighbor);
 			}
 			Vector2 rightGridNeighbor = new Vector2(_targetGridPos.x+1, _targetGridPos.y);
-			if (isValidMoveDir(Vector2.right)) {
+			if (pathIsClear(toWorldCoord(rightGridNeighbor))) {
 				_neighborPositions.Add(rightGridNeighbor);
 			}
 			Vector2 downGridNeighbor = new Vector2(_targetGridPos.x, _targetGridPos.y-1);
-			if (isValidMoveDir(-Vector2.up)) {
+			if (pathIsClear(toWorldCoord(downGridNeighbor))) {
 				_neighborPositions.Add(downGridNeighbor);
 			}
 			Vector2 leftGridNeighbor = new Vector2(_targetGridPos.x-1, _targetGridPos.y);
-			if (isValidMoveDir(-Vector2.right)) {
+			if (pathIsClear(toWorldCoord(leftGridNeighbor))) {
 				_neighborPositions.Add(leftGridNeighbor);
 			}
 
@@ -107,7 +127,7 @@ public class apt283BasicEnemy : Tile {
 				Collider2D[] maybeColliders = Physics2D.OverlapCircleAll(transform.position, playerAwarenessRadius);
 				foreach (Collider2D maybeCollider in maybeColliders) {
 					Tile tile = maybeCollider.GetComponent<Tile>();
-					if (tile != null && tile.hasTag(TileTags.Friendly)) {
+					if (tile != null && tile != this && tile.hasTag(tagsWeAttack)) {
 						// We've found something to use our weapon on
 						aimDirection = ((Vector2)tile.transform.position-(Vector2)transform.position).normalized;
 						tileWereHolding.useAsItem(this);
@@ -118,24 +138,6 @@ public class apt283BasicEnemy : Tile {
 			}
 		}
 	}	
-
-	// Utility function that casts in a direction to see if it's empty (and therefore we can move onto it).
-	protected bool isValidMoveDir(Vector2 direction) {
-		int numCollisions = _body.Cast(direction, _maybeRaycastResults, Tile.TILE_SIZE);
-		for (int i = 0; i < numCollisions && i < _maybeRaycastResults.Length; i++) {
-			RaycastHit2D result = _maybeRaycastResults[i];
-			Tile resultTile = result.transform.GetComponent<Tile>();
-			if (resultTile != null) {
-				if (resultTile.hasTag(TileTags.Wall | TileTags.Creature | TileTags.Exit)) {
-					return false;
-				}
-			}
-			else {
-				return false;
-			}
-		}
-		return true;
-	}
 
 	// We simply try to move towards our target location unless we're too close to it.
 	// Again, since we're moving in a continuous way, have to do movement on fixedUpdate.
@@ -154,7 +156,7 @@ public class apt283BasicEnemy : Tile {
 	// Colliding with a friendly should hurt it.
 	void OnCollisionEnter2D(Collision2D collision) {
 		Tile otherTile = collision.gameObject.GetComponent<Tile>();
-		if (otherTile != null && otherTile.hasTag(TileTags.Friendly)) {
+		if (otherTile != null && otherTile.hasTag(tagsWeAttack)) {
 			otherTile.takeDamage(this, 1);
 			Vector2 toOtherTile = (Vector2)otherTile.transform.position - (Vector2)transform.position;
 			toOtherTile.Normalize();

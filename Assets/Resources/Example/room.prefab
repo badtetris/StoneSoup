@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4243661851364308}
-  - component: {fileID: 114656454082607464}
+  - component: {fileID: 114488515663261840}
   m_Layer: 0
   m_Name: room
   m_TagString: Untagged
@@ -40,7 +40,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114656454082607464
+--- !u!114 &114488515663261840
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -48,16 +48,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1335745978078546}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a713867d07fb74218abe14a69771ca52, type: 3}
+  m_Script: {fileID: 11500000, guid: 294f5a475b8f7481a8f1bb007b2cacda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomAuthor: Example
+  roomAuthor: 
   designedRoomFile: {fileID: 0}
   localTilePrefabs: []
   roomGridX: 0
   roomGridY: 0
-  tilePrefab: {fileID: 1387771116485768, guid: d2d07d972947648a69eac0f6ed8463db, type: 2}
-  minNumTiles: 1
-  maxNumTiles: 3
-  borderWallProbability: 0.9
-  centerWallProbability: 0.9
+  roomChoices:
+  - {fileID: 1335745978078546, guid: 50a1c473afffe4c41811313cdc71de9e, type: 2}
+  - {fileID: 1335745978078546, guid: bf04a445e19ea4cd189f4d7e8c1a6ca1, type: 2}

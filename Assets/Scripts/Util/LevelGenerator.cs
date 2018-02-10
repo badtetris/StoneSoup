@@ -178,24 +178,18 @@ public class LevelGenerator : MonoBehaviour {
 				roomToSpawn = exitRoomPrefab;
 			}
 
-			GameObject roomObj = Instantiate(roomToSpawn) as GameObject;
-			roomObj.transform.parent = GameManager.instance.transform;
-			roomObj.transform.localPosition = new Vector3(totalRoomWidth*currentRoomX, totalRoomHeight*currentRoomY, 0);
-			Room room = roomObj.GetComponent<Room>();
+			Room room = null;
 
 			if (roomToSpawn == startRoomPrefab) {
-				room.generateRoom(this, exitDir);
+				room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, exitDir);
 				GameManager.instance.currentRoom = room;
 			}
 			else if (!makingCriticalPath) {
-				room.generateRoom(this, entranceDir);
+				room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, entranceDir);
 			}
 			else {
-				room.generateRoom(this, entranceDir, exitDir);
+				room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, entranceDir, exitDir);
 			}
-
-			room.roomGridX = currentRoomX;
-			room.roomGridY = currentRoomY;
 
 			roomGrid[currentRoomX, currentRoomY] = room;
 			criticalPath.Add(room);
@@ -208,14 +202,7 @@ public class LevelGenerator : MonoBehaviour {
 		for (int x = 0; x < numXRooms; x++) {
 			for (int y = 0; y < numYRooms; y++) {
 				if (roomGrid[x, y] == null) {
-					GameObject roomObj = Instantiate(nextRoomToSpawn()) as GameObject;
-					roomObj.transform.parent = GameManager.instance.transform;
-					roomObj.transform.localPosition = new Vector3(totalRoomWidth*x, totalRoomHeight*y, 0);
-					Room room = roomObj.GetComponent<Room>();
-					room.generateRoom(this);
-					room.roomGridX = x;
-					room.roomGridY = y;
-					roomGrid[x, y] = room;
+					roomGrid[x, y] = Room.generateRoom(nextRoomToSpawn(), this, x, y);
 				}
 				float roomLeftX = totalRoomWidth*x-Tile.TILE_SIZE/2;
 				float roomRightX = totalRoomWidth*(x+1)+Tile.TILE_SIZE/2;
@@ -404,24 +391,19 @@ public class LevelGenerator : MonoBehaviour {
 				roomToSpawn = exitRoomPrefab;
 			}
 
-			GameObject roomObj = Instantiate(roomToSpawn) as GameObject;
-			roomObj.transform.parent = GameManager.instance.transform;
-			roomObj.transform.localPosition = new Vector3(totalRoomWidth*currentRoomX, totalRoomHeight*currentRoomY, 0);
-			Room room = roomObj.GetComponent<Room>();
+			Room room = null;
 
 			if (roomToSpawn == startRoomPrefab) {
-				room.generateRoom(this, exitDir);
+				room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, exitDir);
 				GameManager.instance.currentRoom = room;
 			}
 			else if (!makingCriticalPath) {
-				room.generateRoom(this, entranceDir);
+				room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, entranceDir);
 			}
 			else {
-				room.generateRoom(this, entranceDir, exitDir);
+				room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, entranceDir, exitDir);
 			}
 
-			room.roomGridX = currentRoomX;
-			room.roomGridY = currentRoomY;
 
 			roomGrid[currentRoomX, currentRoomY] = room;
 			criticalPath.Add(room);
@@ -434,14 +416,7 @@ public class LevelGenerator : MonoBehaviour {
 		for (int x = 0; x < numXRooms; x++) {
 			for (int y = 0; y < numYRooms; y++) {
 				if (roomGrid[x, y] == null) {
-					GameObject roomObj = Instantiate(nextRoomToSpawn()) as GameObject;
-					roomObj.transform.parent = GameManager.instance.transform;
-					roomObj.transform.localPosition = new Vector3(totalRoomWidth*x, totalRoomHeight*y, 0);
-					Room room = roomObj.GetComponent<Room>();
-					room.generateRoom(this);
-					room.roomGridX = x;
-					room.roomGridY = y;
-					roomGrid[x, y] = room;
+					roomGrid[x, y] = Room.generateRoom(nextRoomToSpawn(), this, x, y);
 				}
 				if (roomGrid[x, y] != GameManager.instance.currentRoom) {
 					roomGrid[x, y].gameObject.SetActive(false);

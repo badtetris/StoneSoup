@@ -76,7 +76,7 @@ public class apt283Rock : Tile {
 		_afterThrowCounter = afterThrowTime;
 	}
 
-	void Update() {
+	protected virtual void Update() {
 		if (_isInAir) {
 			if (_afterThrowCounter > 0) {
 				_afterThrowCounter -= Time.deltaTime;

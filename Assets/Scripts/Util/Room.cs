@@ -7,6 +7,27 @@ using UnityEngine;
 //
 public class Room : MonoBehaviour {
 
+
+	// This is the function used by the level generator to generate the whole room. 
+	// It makes use of the "createRoom" and "fillRoom" functions to decide what sort of room to create and also how to fill it
+	public static Room generateRoom(GameObject roomPrefab, LevelGenerator ourGenerator, int roomX, int roomY, params Dir[] requiredExits) {
+		Room newRoom = roomPrefab.GetComponent<Room>().createRoom(requiredExits);
+
+		float totalRoomWidth = Tile.TILE_SIZE*LevelGenerator.ROOM_WIDTH;
+		float totalRoomHeight = Tile.TILE_SIZE*LevelGenerator.ROOM_HEIGHT;
+
+		newRoom.transform.parent = GameManager.instance.transform;
+		newRoom.transform.localPosition = new Vector3(totalRoomWidth*roomX, totalRoomHeight*roomY, 0);
+		
+		newRoom.roomGridX = roomX;
+		newRoom.roomGridY = roomY;
+		
+		newRoom.fillRoom(ourGenerator, requiredExits);
+
+		return newRoom;	
+	}
+
+
 	// Set this value to let everyone know who made the current room. 
 	public string roomAuthor = "";
 
@@ -28,13 +49,23 @@ public class Room : MonoBehaviour {
 	public int roomGridX, roomGridY;
 
 
-	// The generateRoom function is the one you'll need to override to generator your rooms.
+	// The create room function actually instantiates a relevant prefab for a room. 
+	// A good question you might have is why there's a separate function for creating rooms and why we don't 
+	// just instantiate the provided room prefab. 
+	// The reason is we sometimes want to make a room that instantiates OTHER room prefabs 
+	// For example, a room might want to randomly select from other rooms when generating.
+	public virtual Room createRoom(params Dir[] requiredExits) {
+		GameObject roomObj = Instantiate(gameObject);
+		return roomObj.GetComponent<Room>();
+	}
+
+	// The fillRoom function is the one you'll need to override to fill your rooms.
 	// It takes the LevelGenerator as a parameter so you have access to more global prefabs (like walls)
 	// Additionaly, it takes an array of exits that need to exist (your room will have required exits if it's on the critical path).
 	// For an exit to "exist", there can't be a wall in the center part of that edge of the room.
 
 	// This implementation pulls a designed room out of a text file.
-	public virtual void generateRoom(LevelGenerator ourGenerator, params Dir[] requiredExits) {
+	public virtual void fillRoom(LevelGenerator ourGenerator, params Dir[] requiredExits) {
 
 		string initialGridString = designedRoomFile.text;
 		string[] rows = initialGridString.Trim().Split('\n');
