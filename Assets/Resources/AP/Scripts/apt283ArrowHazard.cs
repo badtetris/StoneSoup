@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class apt283ArrowHazard : Wall {
+public class apt283ArrowHazard : BasicAICreature {
 
 	public GameObject arrowPrefab;
 	public Vector2 arrowSpawnOffset;
@@ -18,7 +18,15 @@ public class apt283ArrowHazard : Wall {
 
 	protected float _timeUntilCanFire = 0.1f; // This just ensures that we don't fire at anything that's in view when we first spawn.
 
+	// acts like a will and only takes explosive damage.
+	public override void takeDamage(Tile tileDamagingUs, int amount, DamageType damageType) {
+		if (damageType == DamageType.Explosive) {
+			base.takeDamage(tileDamagingUs, amount, damageType);
+		}
+	}
+
 	void Update() {
+		takeStep();
 		if (_timeUntilCanFire > 0) {
 			_timeUntilCanFire -= Time.deltaTime;
 		}
@@ -28,12 +36,12 @@ public class apt283ArrowHazard : Wall {
 		if (_timeUntilCanFire > 0 || !_loaded) {
 			return;
 		}
-		// FIRE
 		// Now, see if we can SEE the other tile. 
 		if (!canSeeTile(otherTile)) {
 			return;
 		}
 
+		// If we can, then FIRE
 		GameObject arrowObj = Instantiate(arrowPrefab);
 		arrowObj.transform.parent = transform.parent;
 		Physics2D.IgnoreCollision(_collider, arrowObj.GetComponent<Collider2D>());

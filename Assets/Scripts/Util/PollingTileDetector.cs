@@ -35,15 +35,20 @@ public class PollingTileDetector : MonoBehaviour {
 		}
 		_timeTillNextPoll -= Time.deltaTime;
 		if (_timeTillNextPoll <= 0) {
-			int numResults = Physics2D.OverlapCircleNonAlloc(transform.position, detectionRadius, _castResults);
-			for (int i = 0; i < numResults && i < _castResults.Length; i++) {
-				Collider2D result = _castResults[i];
-				Tile otherTile = result.GetComponent<Tile>();
-				if (otherTile != null && otherTile.hasTag(tagsToDetect)) {
-					_parentTile.tileDetected(otherTile);
-				}
-			}
+			performPoll();
 			_timeTillNextPoll = Random.Range(minTimeBetweenPolls, maxTimeBetweenPolls);
+		}
+	}
+
+	// Can be called by something else to force a poll at key moments (i.e. if an enemy always wants to do a poll before taking a step)
+	public void performPoll() {
+		int numResults = Physics2D.OverlapCircleNonAlloc(transform.position, detectionRadius, _castResults);
+		for (int i = 0; i < numResults && i < _castResults.Length; i++) {
+			Collider2D result = _castResults[i];
+			Tile otherTile = result.GetComponent<Tile>();
+			if (otherTile != null && otherTile.hasTag(tagsToDetect)) {
+				_parentTile.tileDetected(otherTile);
+			}
 		}
 	}
 

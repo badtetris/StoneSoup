@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 212392565856517152}
   - component: {fileID: 114040751835081796}
   - component: {fileID: 61074228704509486}
+  - component: {fileID: 50785106960708846}
   m_Layer: 0
   m_Name: arrow_hazard
   m_TagString: Untagged
@@ -73,6 +74,26 @@ Transform:
   m_Father: {fileID: 4567159252759434}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &50785106960708846
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1215785095147150}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!61 &61074228704509486
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -121,7 +142,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 20, y: 0.5}
+  m_Size: {x: 20, y: 0.2}
   m_EdgeRadius: 0
 --- !u!114 &114040751835081796
 MonoBehaviour:
@@ -134,7 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22e0b26ba47ee4574b849162b6d077ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tags: 64
+  tags: 68
   tileName: 
   health: 1
   deathEffect: {fileID: 1581785524438676, guid: b55624526117b4928b6338cb05f43f68,
@@ -144,13 +165,16 @@ MonoBehaviour:
   heldAngle: 0
   tileWereHolding: {fileID: 0}
   aimDirection: {x: 0, y: 0}
+  moveSpeed: 5
+  moveAcceleration: 50
+  tagsWeChase: 32
   arrowPrefab: {fileID: 1838362062477336, guid: 9f1a3fae4eaab431292b5e55575af75e,
     type: 2}
   arrowSpawnOffset: {x: 0.5, y: 0}
   fireDirection: {x: 1, y: 0}
   unloadedSprite: {fileID: 21300000, guid: 573e1172a2f22432f86f7412d51ca7a3, type: 3}
   tileDetectorObj: {fileID: 1799172733323508}
-  shootForce: 2000
+  shootForce: 1000
 --- !u!114 &114903650751864460
 MonoBehaviour:
   m_ObjectHideFlags: 1

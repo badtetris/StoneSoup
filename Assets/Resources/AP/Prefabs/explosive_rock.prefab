@@ -135,7 +135,7 @@ MonoBehaviour:
   deathEffect: {fileID: 1028137201516130, guid: c6956d67d496541a48fe508b48f70f4b,
     type: 2}
   deathSFX: {fileID: 8300000, guid: 409fa4ba0ecc74840a0bb7c5c73aa5c0, type: 3}
-  heldOffset: {x: 0.2, y: -0.1}
+  heldOffset: {x: 0, y: 0}
   heldAngle: 0
   tileWereHolding: {fileID: 0}
   aimDirection: {x: 0, y: 0}
@@ -147,6 +147,9 @@ MonoBehaviour:
   afterThrowTime: 0.2
   explosionRadius: 2
   explosionForce: 2000
+  normalPulsePeriod: 1
+  heldPulsePeriod: 0.5
+  startsInAir: 0
 --- !u!114 &114976914884965158
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -193,7 +196,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2084018341
-  m_SortingLayer: 1
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ec7c82172f5c1462cb54d207fc1ec42e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

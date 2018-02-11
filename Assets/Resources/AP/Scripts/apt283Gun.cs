@@ -45,7 +45,7 @@ public class apt283Gun : Tile {
 			_sprite.transform.localPosition = Vector3.zero;
 			transform.rotation = Quaternion.identity;
 		}
-
+		updateSpriteSorting();
 	}
 
 	public override void useAsItem(Tile tileUsingUs) {

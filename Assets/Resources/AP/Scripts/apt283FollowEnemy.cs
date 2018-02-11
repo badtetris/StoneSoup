@@ -2,27 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class apt283FollowEnemy : Tile {
+public class apt283FollowEnemy : BasicAICreature {
 
 	// How much force we inflict if something collides with us.
 	public float damageForce = 1000;
+	public int damageAmount = 1;
 
-	// When we move, we try to move to grid snapped locations, so our current target
-	// is stored in grid coordinates.
-	protected Vector2 _targetGridPos;
-
-	// We move similar to how the player moves, so we keep similar tunable values.
-	public float moveSpeed = 5;
-	public float moveAcceleration = 100;
 
 	// If we're chasing a friendly object, it'll be stored here.
 	protected Tile _tileWereChasing = null;
 
 	// How far the object we're chasing has to be before we stop chasing it. 
 	public float maxDistanceToContinueChase = 12f;
-
-
-	public TileTags tagsWeChase = TileTags.Friendly;
 
 	// When chasing we either
 	// a. Choose our next target position once we reach our current one
@@ -32,35 +23,24 @@ public class apt283FollowEnemy : Tile {
 	// c. Recalculate our target position when we collide with something (not the target tile).
 	protected float _timeSinceLastStep = 0f;
 
-	// To avoid constantly making a new List data structure, we keep the same list for checking our neighbor positions
-	protected List<Vector2> _neighborPositions;
-
-	void Start() {
-		_targetGridPos = Tile.toGridCoord(globalX, globalY);
-
-		_neighborPositions = new List<Vector2>(8);
-
-		if (_maybeRaycastResults == null) {
-			_maybeRaycastResults = new RaycastHit2D[10];
-		}
-	}
 
 	void Update() {
 		if (_tileWereChasing != null) {
 			_timeSinceLastStep += Time.deltaTime;
 			Vector2 targetGlobalPos = Tile.toWorldCoord(_targetGridPos.x, _targetGridPos.y);
 			float distanceToTarget = Vector2.Distance(transform.position, targetGlobalPos);
-			if (distanceToTarget <= 0.1f || _timeSinceLastStep >= 2f) {
-				takeChaseStep();
+			if (distanceToTarget <= GRID_SNAP_THRESHOLD || _timeSinceLastStep >= 2f) {
+				takeStep();
 			}
 		}
 		else {
 			// Always lock to the position we're in when we're not chasing anything. 
 			_targetGridPos = toGridCoord(globalX, globalY);
 		}
+		updateSpriteSorting();
 	}
 
-	protected void takeChaseStep() {
+	protected override void takeStep() {
 		_timeSinceLastStep = 0f;
 
 		// First, figure out if the target is too far away
@@ -72,7 +52,6 @@ public class apt283FollowEnemy : Tile {
 
 		// We do this to re-calculate exactly where we are right now. 
 		_targetGridPos = Tile.toGridCoord(globalX, globalY);
-
 
 		_neighborPositions.Clear();
 
@@ -126,47 +105,6 @@ public class apt283FollowEnemy : Tile {
 	}
 
 
-	void FixedUpdate() {
-		Vector2 targetGlobalPos = Tile.toWorldCoord(_targetGridPos.x, _targetGridPos.y);
-		if (Vector2.Distance(transform.position, targetGlobalPos) >= 0.1f) {
-			// If we're away from our target position, move towards it.
-			Vector2 toTargetPos = (targetGlobalPos - (Vector2)transform.position).normalized;
-			moveViaVelocity(toTargetPos, moveSpeed, moveAcceleration);
-			// Figure out which direction we're going to face. 
-			// Prioritize side and down.
-			if (toTargetPos.x >= 0) {
-				_sprite.flipX = false;
-			}
-			else {
-				_sprite.flipX = true;
-			}
-
-			if (_anim != null) {
-				// Make sure we're marked as walking.
-				_anim.SetBool("Walking", true);
-				if (Mathf.Abs(toTargetPos.x) > 0 && Mathf.Abs(toTargetPos.x) > Mathf.Abs(toTargetPos.y)) {
-					_anim.SetInteger("Direction", 1);
-				}
-				else if (toTargetPos.y > 0 && toTargetPos.y > Mathf.Abs(toTargetPos.x)) {
-					_anim.SetInteger("Direction", 0);
-				}
-				else if (toTargetPos.y < 0 && Mathf.Abs(toTargetPos.y) > Mathf.Abs(toTargetPos.x)) {
-					_anim.SetInteger("Direction", 2);
-				}
-			}
-
-
-		}
-		else {
-			moveViaVelocity(Vector2.zero, 0, moveAcceleration);
-			if (_anim != null) {
-				_anim.SetBool("Walking", false);
-			}
-		}
-	}
-
-
-
 	// Colliding with a friendly should hurt it.
 	void OnCollisionEnter2D(Collision2D collision) {
 		Tile otherTile = collision.gameObject.GetComponent<Tile>();
@@ -175,11 +113,11 @@ public class apt283FollowEnemy : Tile {
 		if (otherTile != _tileWereChasing && _tileWereChasing != null
 			&& otherTile != null && otherTile.hasTag(TileTags.Creature)) {
 			//_moveCooldownTimer = 0.5f;
-			takeChaseStep();
+			takeStep();
 		}
 
 		if (otherTile != null && otherTile.hasTag(tagsWeChase)) {
-			otherTile.takeDamage(this, 1);
+			otherTile.takeDamage(this, damageAmount);
 			Vector2 toOtherTile = (Vector2)otherTile.transform.position - (Vector2)transform.position;
 			toOtherTile.Normalize();
 			otherTile.addForce(damageForce*toOtherTile);
@@ -194,10 +132,9 @@ public class apt283FollowEnemy : Tile {
 	public override void tileDetected(Tile otherTile) {
 		if (_tileWereChasing == null && otherTile.hasTag(tagsWeChase)) {
 			_tileWereChasing = otherTile;
-			takeChaseStep();
+			takeStep();
 		}
 	}
-
 
 	// For the purposes of chasing an object, we make a special CanOverlapFunc that ignores the tile we're chasing
 	protected bool CanOverlapIgnoreTargetTile(RaycastHit2D hitResult) {

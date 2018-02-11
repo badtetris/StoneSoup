@@ -115,9 +115,6 @@ public class Player : Tile {
 
 		// Now check if we're on top of an item we can pick up, if so, display the hand symbol.
 		bool onItem = false;
-		if (_maybeRaycastResults == null) {
-			_maybeRaycastResults = new RaycastHit2D[10];
-		}
 		int numObjectsFound = _body.Cast(Vector2.zero, _maybeRaycastResults);
 		for (int i = 0; i < numObjectsFound && i < _maybeRaycastResults.Length; i++) {
 			RaycastHit2D result = _maybeRaycastResults[i];
@@ -173,9 +170,6 @@ public class Player : Tile {
 			// If we successully dropped the item
 			if (tileWereHolding == null) {
 				// Check to see if we're on top of an item that can be held
-				if (_maybeRaycastResults == null) {
-					_maybeRaycastResults = new RaycastHit2D[10];
-				}
 				int numObjectsFound = _body.Cast(Vector2.zero, _maybeRaycastResults);
 				for (int i = 0; i < numObjectsFound && i < _maybeRaycastResults.Length; i++) {
 					RaycastHit2D result = _maybeRaycastResults[i];
@@ -208,6 +202,8 @@ public class Player : Tile {
 				tileWereHolding.useAsItem(this);
 			}
 		}
+
+		updateSpriteSorting();
 	}
 
 

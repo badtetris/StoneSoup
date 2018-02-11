@@ -122,8 +122,13 @@ public class Tile : MonoBehaviour {
 	// It's common for tiles to use the Rigidbody2D.Cast function to check for nearby tiles.
 	// The specifics of that function require us to have a pre-made array to hold results of the call.
 	// This property can be used for that purpose.
-	// Note that it isn't initialized by default so if you're going to use it you'll need to initialize it.
-	protected RaycastHit2D[] _maybeRaycastResults = null;
+	// BE WARNED: Since it's static, it will likely be overwritten after you're done with it, so make sure you copy results you need for later.
+	protected static RaycastHit2D[] _maybeRaycastResults = new RaycastHit2D[10];
+
+	// Similarly, depending on the physics function we might need an array of a different type.
+	protected static Collider2D[] _maybeColliderResults = new Collider2D[10];
+	protected static ContactPoint2D[] _maybeContactResults = new ContactPoint2D[10];
+
 
 	// Variable that ensures we don't get multiple calls to die on the same frame (for instance if multiple damage sources hit us at the same time)
 	protected bool _alive = true;
@@ -189,6 +194,7 @@ public class Tile : MonoBehaviour {
 	// control over when it's called (for instance, if we just instantiated a tile, Start won't be called until after our current code compeletes, etc.)
 	public virtual void init() {
 		_sprite = GetComponentInChildren<SpriteRenderer>();
+		updateSpriteSorting();
 		_anim = GetComponentInChildren<Animator>();
 		if (hasTag(TileTags.Creature) && GetComponent<Rigidbody2D>() == null) {
 			_body = gameObject.AddComponent<Rigidbody2D>();
@@ -197,6 +203,24 @@ public class Tile : MonoBehaviour {
 			_body = GetComponent<Rigidbody2D>();
 		}
 		_collider = GetComponent<Collider2D>();
+	}
+
+	protected virtual void updateSpriteSorting() {
+		if (_sprite == null) {
+			return;
+		}
+		if (_tileHoldingUs != null) {
+			_sprite.sortingLayerID = _tileHoldingUs.sprite.sortingLayerID;
+			_sprite.sortingOrder = _tileHoldingUs.sprite.sortingOrder+1;
+			return;
+		}
+		else if (hasTag(TileTags.CanBeHeld)) {
+			_sprite.sortingLayerID = SortingLayer.NameToID("Floor");
+		}
+		else {
+			_sprite.sortingLayerID = SortingLayer.NameToID("Default");
+		}
+		_sprite.sortingOrder = -(int)globalY;
 	}
 
 
@@ -257,7 +281,7 @@ public class Tile : MonoBehaviour {
 		removeTag(TileTags.CanBeHeld);
 		tilePickingUsUp.tileWereHolding = this;
 		_tileHoldingUs = tilePickingUsUp;
-		_sprite.sortingLayerID = SortingLayer.NameToID("Default");
+		updateSpriteSorting();
 	}
 
 	// Similarly, when a tile is dropped, it DECIDES WHETHER IT WAS ACTUALLY DROPPED
@@ -280,7 +304,7 @@ public class Tile : MonoBehaviour {
 		addTag(TileTags.CanBeHeld);
 		_tileHoldingUs.tileWereHolding = null;
 		_tileHoldingUs = null;
-		_sprite.sortingLayerID = SortingLayer.NameToID("Floor");
+		updateSpriteSorting();
 	}
 
 	// When a tile is being held, it can be used as an item.
@@ -312,9 +336,6 @@ public class Tile : MonoBehaviour {
 	// BUT you shouldn't be able to drop or use items there, so this function checks if this tile is in a transition area.
 	public bool onTransitionArea() {
 		if (_body != null) {
-			if (_maybeRaycastResults == null) {
-				_maybeRaycastResults = new RaycastHit2D[10];
-			}
 			int numObjectsFound = _body.Cast(Vector2.zero, _maybeRaycastResults);
 			for (int i = 0; i < numObjectsFound && i < _maybeRaycastResults.Length; i++) {
 				RaycastHit2D result = _maybeRaycastResults[i];
@@ -322,7 +343,6 @@ public class Tile : MonoBehaviour {
 					return true;
 				}
 			}
-
 		}
 		return false;
 	}
@@ -352,7 +372,33 @@ public class Tile : MonoBehaviour {
 	}
 
 
-	// Some delegate types. 
+	// This function provides a rough estimate of how much impact was involved in a collision.
+	// Can be used to figure out if something hit something else hard enough to deal damage etc. 
+	// WARNING: This is a little rough and has some known issues (i.e. GetContacts appears to be a bit buggy on the Unity side)
+	protected float collisionImpactLevel(Collision2D collision) {
+		int numContacts = collision.GetContacts(_maybeContactResults);
+		float maxContactImpact = 0;
+		// GetContacts probably SHOULDN'T ever return 0, but sometimes it does (a bug maybe?)
+		// In that rare case, it's okay to allocate the contact array.
+		if (numContacts == 0) {
+			foreach (ContactPoint2D contact in collision.contacts) {
+				float contactImpact = Vector2.Dot(contact.relativeVelocity, contact.normal);
+				if (contactImpact > maxContactImpact) {
+					maxContactImpact = contactImpact;
+				}
+			}
+			return maxContactImpact;
+		}
+		for (int i = 0; i < numContacts && i < _maybeContactResults.Length; i++) {
+			float contactImpact = Vector2.Dot(_maybeContactResults[i].relativeVelocity, _maybeContactResults[i].normal);
+			if (contactImpact > maxContactImpact) {
+				maxContactImpact = contactImpact;
+			}
+		}
+		return maxContactImpact;
+	}
+
+	// Delegate types used for pathfinding (basic or otherwise)
 	public delegate bool CanOverlapFunc(RaycastHit2D hitResult);
 
 	protected bool DefaultCanOverlapFunc(RaycastHit2D hitResult) {
@@ -384,10 +430,6 @@ public class Tile : MonoBehaviour {
 		Vector2 toTarget = target-(Vector2)transform.position;
 		float distanceToTarget = toTarget.magnitude;
 		toTarget.Normalize();
-		// We use our existing _maybeRaycastResults array to avoid allocating a new array. 
-		if (_maybeRaycastResults == null) {
-			_maybeRaycastResults = new RaycastHit2D[10];
-		}
 
 		// Now we perform a collider "Cast" i.e. we simulate moving our collider forward along the path from us to our target. 
 		// Any objects that the physics engine detects as collider with this simulated collider will be stored in _maybeRaycastResults
@@ -413,9 +455,6 @@ public class Tile : MonoBehaviour {
 		float distancetoTarget = toTarget.magnitude;
 		toTarget.Normalize();
 
-		if (_maybeRaycastResults == null) {
-			_maybeRaycastResults = new RaycastHit2D[10];
-		}
 		int numCollisions = Physics2D.RaycastNonAlloc(transform.position, toTarget, _maybeRaycastResults, distancetoTarget);
 		for (int i = 0; i < numCollisions && i < _maybeRaycastResults.Length; i++) {
 			RaycastHit2D result = _maybeRaycastResults[i];
@@ -424,7 +463,6 @@ public class Tile : MonoBehaviour {
 				|| result.transform == target.transform) {
 				continue;
 			}
-			Debug.Log(result.transform);
 			return false;
 		}
 		return true;

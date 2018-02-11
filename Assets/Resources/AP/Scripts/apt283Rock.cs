@@ -46,6 +46,7 @@ public class apt283Rock : Tile {
 		}
 		AudioManager.playAudio(throwSound);
 
+		_sprite.transform.localPosition = Vector3.zero;
 
 		_tileThatThrewUs = tileUsingUs;
 		_isInAir = true;
@@ -91,17 +92,30 @@ public class apt283Rock : Tile {
 				_collider.isTrigger = true;
 				addTag(TileTags.CanBeHeld);
 				_isInAir = false;
-				_sprite.sortingLayerID = SortingLayer.NameToID("Floor");
-
 			}
 		}
+		
+
+		if (_tileHoldingUs != null) {
+			// We aim the rock behind us.
+			_sprite.transform.localPosition = new Vector3(-0.5f, 0, 0);
+			float aimAngle = Mathf.Atan2(_tileHoldingUs.aimDirection.y, _tileHoldingUs.aimDirection.x)*Mathf.Rad2Deg;
+			transform.localRotation = Quaternion.Euler(0, 0, aimAngle);
+		}
+		else {
+			_sprite.transform.localPosition = Vector3.zero;
+		}
+
+
+		updateSpriteSorting();
 	}
 
 	// When we collide with something in the air, we try to deal damage to it.
 	public virtual void OnCollisionEnter2D(Collision2D collision) {
 		if (_isInAir && collision.gameObject.GetComponent<Tile>() != null) {
+			float impact = collisionImpactLevel(collision);
 			// First, make sure we're going fast enough to do damage
-			if (collision.relativeVelocity.magnitude <= damageThreshold) {
+			if (impact <= damageThreshold) {
 				return;
 			}
 			Tile otherTile = collision.gameObject.GetComponent<Tile>();
