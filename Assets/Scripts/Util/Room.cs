@@ -15,6 +15,12 @@ public class Room : MonoBehaviour {
 
 		float totalRoomWidth = Tile.TILE_SIZE*LevelGenerator.ROOM_WIDTH;
 		float totalRoomHeight = Tile.TILE_SIZE*LevelGenerator.ROOM_HEIGHT;
+		if (GameManager.gameMode == GameManager.GameMode.SingleRoom) {
+			totalRoomWidth = Tile.TILE_SIZE*(LevelGenerator.ROOM_WIDTH+1);
+			totalRoomHeight = Tile.TILE_SIZE*(LevelGenerator.ROOM_HEIGHT+1);
+		}
+
+		
 
 		newRoom.transform.parent = GameManager.instance.transform;
 		newRoom.transform.localPosition = new Vector3(totalRoomWidth*roomX, totalRoomHeight*roomY, 0);
