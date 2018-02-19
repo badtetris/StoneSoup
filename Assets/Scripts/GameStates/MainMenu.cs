@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class MainMenu : MonoBehaviour {
 
 	public AudioClip clickSound;
+
+	void Start() {
+		File.WriteAllText("TestFile.txt", "TEST!");
+	}
 
 	public void startGameSingleRoom() {
 		AudioManager.playAudio(clickSound);

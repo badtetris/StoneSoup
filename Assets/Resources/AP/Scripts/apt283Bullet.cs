@@ -14,7 +14,9 @@ public class apt283Bullet : Tile {
 
 	void Start() {
 		_contacts = new ContactPoint2D[10];
-		GetComponent<TrailRenderer>().Clear();
+		if (GetComponent<TrailRenderer>() != null) {
+			GetComponent<TrailRenderer>().Clear();
+		}
 	}
 
 	void Update() {

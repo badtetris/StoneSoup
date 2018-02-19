@@ -106,12 +106,18 @@ public class Tile : MonoBehaviour {
 	// Common Unity components that tiles might have.
 	// If the tile has the component when init is called, these variables will fill with the appropriate values.
 	protected Rigidbody2D _body;
+	public virtual Rigidbody2D body {
+		get { return _body; }
+	}
 	protected SpriteRenderer _sprite;
-	public SpriteRenderer sprite {
+	public virtual SpriteRenderer sprite {
 		get { return _sprite; }
 	}
 	protected Animator _anim;
 	protected Collider2D _collider;
+	public virtual Collider2D mainCollider {
+		get { return _collider; }
+	}
 
 	/////////////////////////////////
 
@@ -179,8 +185,8 @@ public class Tile : MonoBehaviour {
 
 	// The method used to move other tiles.
 	public void addForce(Vector2 force) {
-		if (_body != null) {
-			_body.AddForce(force);
+		if (body != null) {
+			body.AddForce(force);
 		}
 	}
 

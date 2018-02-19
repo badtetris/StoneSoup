@@ -56,6 +56,20 @@ public class apt283Gun : Tile {
 		// First, make sure we're aimed properly (to avoid shooting ourselves by accident)
 		aim();
 
+
+		// Check to see if the muzzle is overlapping anything. 
+		int numBlockers = Physics2D.OverlapPointNonAlloc(muzzleFlashObj.transform.position, _maybeColliderResults);
+		for (int i = 0; i < numBlockers && i < _maybeColliderResults.Length; i++) {
+			if (!_maybeColliderResults[i].isTrigger && _maybeColliderResults[i] != mainCollider) {
+				ObjShake maybeSpriteShake = _sprite.GetComponent<ObjShake>();
+				if (maybeSpriteShake != null) {
+					maybeSpriteShake.shake();
+				}
+
+				return;
+			}
+		}
+
 		muzzleFlashObj.SetActive(true);
 		Invoke("deactivateFlash", 0.1f);
 		tileUsingUs.addForce(-recoilForce*tileUsingUs.aimDirection.normalized);
