@@ -2,15 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireTile : MonoBehaviour {
+public class on364_FireTile : Tile {
+    public float explodeWhen = 2f;
+    public bool triggered = false;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public GameObject Explosion;
+
+    void Update()
+    {
+        if (triggered)
+        {
+            explodeWhen -= Time.deltaTime;
+        }
+        if (explodeWhen <= 0f)
+        {
+            GameObject boom = Instantiate(Explosion, transform.position, Quaternion.identity);
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D otherCollider)
+    {
+        Tile tileCheck = otherCollider.GetComponent<Tile>();
+        if (tileCheck != null && tileCheck.hasTag(TileTags.Creature))
+        {
+            if (!triggered)
+            {
+                triggered = true;
+            }
+        }
+    }
+
 }

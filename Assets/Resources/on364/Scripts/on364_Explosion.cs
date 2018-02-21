@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class on364_Explosion : MonoBehaviour {
+public class on364_Explosion : Tile {
 
 	// Use this for initialization
 	void Start () {
