@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class on364_shot : Tile {
 
-
-    public float deathTimer = 2f;
-
     public float damageThreshold = 4;
 
     // Use this for initialization
@@ -15,14 +12,6 @@ public class on364_shot : Tile {
 
     // Update is called once per frame
     void Update() {
-        if (deathTimer > 0f)
-        {
-            deathTimer = deathTimer - Time.deltaTime;
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
     }
 
     protected override void updateSpriteSorting()
@@ -41,6 +30,7 @@ public class on364_shot : Tile {
             }
             Tile otherTile = collision.gameObject.GetComponent<Tile>();
             otherTile.takeDamage(this, 1);
+			Destroy (this.gameObject);
         }
     }
 }
