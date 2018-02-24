@@ -19,7 +19,9 @@ public enum TileTags {
 	Consumable = 0x100,
 	Wearable = 0x200,
 	Money = 0x400,
-	Dateable = 0x800
+	Dateable = 0x800,
+	Dirt = 0x1000,
+	Water = 0x2000
 }
 
 // The two damage types available to us.
@@ -55,6 +57,7 @@ public class Tile : MonoBehaviour {
 
 	// ALL tiles have health, when they run out, they die.
 	public int health = 1;
+	protected int _startHealth;
 
 	// If you define a death effect for a tile, it'll be spawned when the tile dies.
 	public GameObject deathEffect;
@@ -209,6 +212,7 @@ public class Tile : MonoBehaviour {
 			_body = GetComponent<Rigidbody2D>();
 		}
 		_collider = GetComponent<Collider2D>();
+		_startHealth = health;
 	}
 
 	protected virtual void updateSpriteSorting() {
@@ -246,6 +250,10 @@ public class Tile : MonoBehaviour {
 		if (health <= 0) {
 			die();
 		}
+	}
+
+	public virtual void restoreAllHealth() {
+		health = _startHealth;
 	}
 
 	// The function that's called when a tile dies.
@@ -403,6 +411,21 @@ public class Tile : MonoBehaviour {
 		}
 		return maxContactImpact;
 	}
+
+
+	// This function will look for a tile type at a specific point and return the first version it finds
+	// Returns null if it can't find one
+	public static Tile tileAtPoint(Vector2 point, TileTags testTags) {
+		int numObjects = Physics2D.OverlapPointNonAlloc(point, _maybeColliderResults);
+		for (int i = 0; i < numObjects && i < _maybeColliderResults.Length; i++) {
+			Tile maybeTile = _maybeColliderResults[i].GetComponent<Tile>();
+			if (maybeTile != null && maybeTile.hasTag(testTags)) {
+				return maybeTile;
+			}
+		}
+		return null;
+	}
+
 
 	// Delegate types used for pathfinding (basic or otherwise)
 	public delegate bool CanOverlapFunc(RaycastHit2D hitResult);
