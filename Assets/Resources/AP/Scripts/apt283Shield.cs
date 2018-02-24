@@ -16,9 +16,9 @@ public class apt283Shield : Tile {
 
 	// shields only take explosive damage.
 	public override void takeDamage(Tile tileDamagingUs, int amount, DamageType damageType) {
-		if (damageType == DamageType.Explosive) {
-			base.takeDamage(tileDamagingUs, amount, damageType);
-		}
+		//if (damageType == DamageType.Explosive) {
+		//	base.takeDamage(tileDamagingUs, amount, damageType);
+		//}
 	}
 
 	public override void pickUp(Tile tilePickingUsUp) {

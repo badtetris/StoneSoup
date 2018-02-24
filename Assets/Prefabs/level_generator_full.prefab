@@ -51,21 +51,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cbb0b41a990c491db5a3893072ee166, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  netIDs:
-  - apt283
-  - fakeNetID
-  - ay852
-  - cdh343
-  - gw805
-  - kt1556
-  - mcr431
-  - mjm973
-  - ayl292
-  - bgh252
-  - ccs403
-  - er1922
-  - sc4438-1
-  - tjt288
   startRoomPrefab: {fileID: 1335745978078546, guid: 850bb3f83990641f6a1be4624fc1e67e,
     type: 2}
   exitRoomPrefab: {fileID: 1335745978078546, guid: cb9529cb24460473b9be220b40230951,

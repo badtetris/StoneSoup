@@ -24,7 +24,7 @@ public class apt283Bullet : Tile {
 		if (_body.velocity.magnitude <= onGroundThreshold) {
 			_destroyTimer -= Time.deltaTime;
 			if (_destroyTimer <= 0) {
-				Destroy(gameObject);
+				die();
 			}
 		}
 	}
