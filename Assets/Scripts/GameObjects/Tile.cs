@@ -21,7 +21,10 @@ public enum TileTags {
 	Money = 0x400,
 	Dateable = 0x800,
 	Dirt = 0x1000,
-	Water = 0x2000
+	Water = 0x2000,
+	Plant = 0x4000,
+	Flammable = 0x8000,
+	Merchant = 0x10000
 }
 
 // The two damage types available to us.
