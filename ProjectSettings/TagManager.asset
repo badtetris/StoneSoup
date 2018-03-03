@@ -17,7 +17,7 @@ TagManager:
   - 
   - TransitionSpace
   - Player
-  - 
+  - Wall
   - 
   - 
   - 
@@ -40,6 +40,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Under Ground
+    uniqueID: 693974931
+    locked: 0
   - name: Below Floor
     uniqueID: 3076465537
     locked: 0

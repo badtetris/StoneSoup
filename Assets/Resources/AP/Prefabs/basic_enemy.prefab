@@ -159,7 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c72d456f4419042e392e277c0eed47f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tags: 20
+  tags: 36
   tileName: 
   health: 1
   deathEffect: {fileID: 1581785524438676, guid: b55624526117b4928b6338cb05f43f68,
@@ -169,14 +169,13 @@ MonoBehaviour:
   heldAngle: 0
   tileWereHolding: {fileID: 0}
   aimDirection: {x: 0, y: 0}
-  damageForce: 1000
   moveSpeed: 5
   moveAcceleration: 100
+  tagsWeChase: 16
+  damageForce: 1000
+  damageAmount: 1
   timeBetweenMovesMin: 1.5
   timeBetweenMovesMax: 3
-  checkForPlayerTime: 0.5
-  playerAwarenessRadius: 12
-  tagsWeAttack: 32
   maybeWeaponsToStartWith:
   - {fileID: 1387771116485768, guid: e4d00d2fcd2614042856187fc264cd0d, type: 2}
   - {fileID: 1387771116485768, guid: e4d00d2fcd2614042856187fc264cd0d, type: 2}

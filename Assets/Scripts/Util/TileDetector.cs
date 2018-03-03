@@ -14,6 +14,7 @@ public class TileDetector : MonoBehaviour {
 
 	void Start() {
 		_parentTile = GetComponentInParent<Tile>();
+		gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
 	}
 
 	void OnTriggerEnter2D(Collider2D other) {

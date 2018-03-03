@@ -57,5 +57,5 @@ MonoBehaviour:
   roomGridX: 0
   roomGridY: 0
   roomChoices:
-  - {fileID: 1335745978078546, guid: 0b699200179de46e6ad4abfcb12ad90e, type: 2}
+  - {fileID: 1896788399910994, guid: f241f8aefd8d141e18a3dbe75af6daf0, type: 2}
   - {fileID: 1335745978078546, guid: c8a695a8ea5e043b4b0f41cb0f84a70b, type: 2}

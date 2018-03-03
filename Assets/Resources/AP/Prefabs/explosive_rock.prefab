@@ -163,7 +163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pulsePeriod: 1
   pulseMinAmp: 0.75
-  pulseMaxAmp: 1.5
+  pulseMaxAmp: 1
 --- !u!212 &212479910496266172
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -198,7 +198,7 @@ SpriteRenderer:
   m_SortingLayerID: 2084018341
   m_SortingLayer: -1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: ec7c82172f5c1462cb54d207fc1ec42e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: af0fdcfd9b1114882be6af237f3c331d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

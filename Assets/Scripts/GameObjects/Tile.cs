@@ -97,11 +97,11 @@ public class Tile : MonoBehaviour {
 		return (tags & tag) != 0;	
 	}
 
-	protected void removeTag(TileTags tagsToRemove) {
+	public void removeTag(TileTags tagsToRemove) {
 		tags = tags & ~(tagsToRemove);
 	}
 
-	protected void addTag(TileTags tagsToAdd) {
+	public void addTag(TileTags tagsToAdd) {
 		tags |= tagsToAdd;
 	}
 
@@ -135,11 +135,11 @@ public class Tile : MonoBehaviour {
 	// The specifics of that function require us to have a pre-made array to hold results of the call.
 	// This property can be used for that purpose.
 	// BE WARNED: Since it's static, it will likely be overwritten after you're done with it, so make sure you copy results you need for later.
-	protected static RaycastHit2D[] _maybeRaycastResults = new RaycastHit2D[10];
+	protected static RaycastHit2D[] _maybeRaycastResults = new RaycastHit2D[15];
 
 	// Similarly, depending on the physics function we might need an array of a different type.
-	protected static Collider2D[] _maybeColliderResults = new Collider2D[10];
-	protected static ContactPoint2D[] _maybeContactResults = new ContactPoint2D[10];
+	protected static Collider2D[] _maybeColliderResults = new Collider2D[15];
+	protected static ContactPoint2D[] _maybeContactResults = new ContactPoint2D[15];
 
 
 	// Variable that ensures we don't get multiple calls to die on the same frame (for instance if multiple damage sources hit us at the same time)
@@ -149,6 +149,10 @@ public class Tile : MonoBehaviour {
 	// If a tile is holding us, this variable contains information about that tile
 	// If no tile is holding us, this should be null.
 	protected Tile _tileHoldingUs;
+
+	public bool isBeingHeld {
+		get { return _tileHoldingUs != null; }
+	}
 
 	/////////////////////////////////
 

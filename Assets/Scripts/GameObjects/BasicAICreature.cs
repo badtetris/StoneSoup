@@ -13,6 +13,10 @@ public class BasicAICreature : Tile {
 	// When we move, we try to move to grid snapped locations, so our current target
 	// is stored in grid coordinates.
 	protected Vector2 _targetGridPos;
+	public Vector2 targetGridPos {
+		get { return _targetGridPos; }
+	}
+
 
 	// We move similar to how the player moves, so we keep similar tunable values.
 	public float moveSpeed = 5;

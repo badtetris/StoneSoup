@@ -15,11 +15,11 @@ public class apt283Shield : Tile {
 	}
 
 	// shields only take explosive damage.
-	public override void takeDamage(Tile tileDamagingUs, int amount, DamageType damageType) {
-		if (damageType == DamageType.Explosive) {
-			base.takeDamage(tileDamagingUs, amount, damageType);
-		}
-	}
+	//public override void takeDamage(Tile tileDamagingUs, int amount, DamageType damageType) {
+		//if (damageType == DamageType.Explosive) {
+		//	base.takeDamage(tileDamagingUs, amount, damageType);
+		//}
+	//}
 
 	public override void pickUp(Tile tilePickingUsUp) {
 		base.pickUp(tilePickingUsUp);
@@ -53,6 +53,12 @@ public class apt283Shield : Tile {
 
 			transform.parent = tileDroppingUs.transform.parent;
 			transform.position = tileDroppingUs.transform.position;
+		}
+	}
+
+	void Update() {
+		if (_tileHoldingUs != null) {
+			tileName = string.Format("Shield (HP: {0})", health);
 		}
 	}
 

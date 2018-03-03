@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b1c90367b8d6435990c1cc4f1f4eacb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tags: 36
+  tags: 20
   tileName: 
   health: 3
   deathEffect: {fileID: 1581785524438676, guid: b55624526117b4928b6338cb05f43f68,
@@ -150,7 +150,7 @@ MonoBehaviour:
   aimDirection: {x: 0, y: 0}
   moveSpeed: 6
   moveAcceleration: 100
-  tagsWeChase: 16
+  tagsWeChase: 32
   damageForce: 1000
   damageAmount: 1
   maxDistanceToContinueChase: 14

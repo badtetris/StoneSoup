@@ -24,9 +24,13 @@ public class PollingTileDetector : MonoBehaviour {
 
 	protected Tile _parentTile;
 
+	public LayerMask layerMask = 0x1 + 0x200;
+
+
 	void Start() {
 		_parentTile = GetComponentInParent<Tile>();
 		_timeTillNextPoll = Random.Range(minTimeBetweenPolls, maxTimeBetweenPolls);
+		gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
 	}
 
 	void Update() {
@@ -42,8 +46,10 @@ public class PollingTileDetector : MonoBehaviour {
 
 	// Can be called by something else to force a poll at key moments (i.e. if an enemy always wants to do a poll before taking a step)
 	public void performPoll() {
-		int numResults = Physics2D.OverlapCircleNonAlloc(transform.position, detectionRadius, _castResults);
+		int numResults = Physics2D.OverlapCircleNonAlloc(transform.position, detectionRadius, _castResults, layerMask);
+
 		for (int i = 0; i < numResults && i < _castResults.Length; i++) {
+			
 			Collider2D result = _castResults[i];
 			Tile otherTile = result.GetComponent<Tile>();
 			if (otherTile != null && otherTile.hasTag(tagsToDetect)) {

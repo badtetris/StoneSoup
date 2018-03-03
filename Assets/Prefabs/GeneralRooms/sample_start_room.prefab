@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4243661851364308}
   - component: {fileID: 114252373118954356}
+  - component: {fileID: 114637684746581268}
   m_Layer: 0
   m_Name: sample_start_room
   m_TagString: Untagged
@@ -57,6 +58,26 @@ MonoBehaviour:
   - {fileID: 1387771116485768, guid: ce2d79339b8a6426fa12ae397abdfaad, type: 2}
   - {fileID: 1387771116485768, guid: e4d00d2fcd2614042856187fc264cd0d, type: 2}
   - {fileID: 1097009321995878, guid: 7f119146519d742d7953341b07580643, type: 2}
+  - {fileID: 1149958410248344, guid: ee936bf08cdce42e79388411f81c74c6, type: 2}
+  - {fileID: 1732722558248282, guid: de3148f133d9f4d7aa23723103c6b9af, type: 2}
+  - {fileID: 1870026949655498, guid: 511c9ae963ac44028984ed3848be9845, type: 2}
+  - {fileID: 1273737218209362, guid: f6d74b122170b4644be17baf43f29ac9, type: 2}
+  - {fileID: 1614338125090674, guid: c6546c3e9410342e4955559817dfb24b, type: 2}
   - {fileID: 1312951893184288, guid: 68f68340d004845b1b0a1ace895aa64d, type: 2}
+  - {fileID: 1273737218209362, guid: f6d74b122170b4644be17baf43f29ac9, type: 2}
   roomGridX: 0
   roomGridY: 0
+--- !u!114 &114637684746581268
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1335745978078546}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a24cf6119dfb4bfc84529488ff3bf38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rainDropPrefab: {fileID: 1775719862354296, guid: 3ac434cc6cda24e12a637d68d593eee8,
+    type: 2}
+  numDropsPerFrame: 1

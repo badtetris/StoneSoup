@@ -11,6 +11,10 @@ public class apt283FollowEnemy : BasicAICreature {
 
 	// If we're chasing a friendly object, it'll be stored here.
 	protected Tile _tileWereChasing = null;
+	public Tile tileWereChasing {
+		get { return _tileWereChasing; }
+		set { _tileWereChasing = value; }
+	}
 
 	// How far the object we're chasing has to be before we stop chasing it. 
 	public float maxDistanceToContinueChase = 12f;
@@ -100,8 +104,36 @@ public class apt283FollowEnemy : BasicAICreature {
 				minDistance = distanceFromTarget;
 			}
 		}
+		if (minNeighbor == _targetGridPos) {
+			// Couldn't get any closer, stop the chase!
+			_tileWereChasing = null;
+		}
 
 		_targetGridPos = minNeighbor;
+
+	}
+
+	protected void takeCorrectionStep() {
+		// We do this when we need to correct where we think we are
+		// i.e. if we and another creature think we're both on the same gridpos, one of us needs to switch to a neighboring gridPos.
+		_timeSinceLastStep = 0f;
+
+		Vector2 targetWorldPos = toWorldCoord(_targetGridPos);
+		float xDistance = Mathf.Abs(targetWorldPos.x - transform.position.x);
+		float yDistance = Mathf.Abs(targetWorldPos.y - transform.position.y);
+
+		if (transform.position.y > targetWorldPos.y && yDistance > xDistance) {
+			_targetGridPos += Vector2.up; // Correct upwards.
+		}
+		else if (transform.position.x > targetWorldPos.x && xDistance > yDistance) {
+			_targetGridPos += Vector2.right; // Correct to the right.
+		}
+		else if (transform.position.y < targetWorldPos.y && yDistance > xDistance) {
+			_targetGridPos -= Vector2.up; // Correct down.
+		}
+		else {
+			_targetGridPos -= Vector2.right; // Correct left.
+		}
 	}
 
 
@@ -112,8 +144,13 @@ public class apt283FollowEnemy : BasicAICreature {
 		// If we're chasing something, then take a step probably
 		if (otherTile != _tileWereChasing && _tileWereChasing != null
 			&& otherTile != null && otherTile.hasTag(TileTags.Creature)) {
-			//_moveCooldownTimer = 0.5f;
-			takeStep();
+			BasicAICreature maybeOtherCreature = (otherTile as BasicAICreature);
+			if (maybeOtherCreature != null
+				&& maybeOtherCreature.targetGridPos == _targetGridPos
+				&& transform.position.y < otherTile.transform.position.y) {
+				// We now have to take a correction step.
+				takeCorrectionStep();
+			}
 		}
 
 		if (otherTile != null && otherTile.hasTag(tagsWeChase)) {
