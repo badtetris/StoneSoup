@@ -28,24 +28,25 @@ public class apt283FollowEnemy : BasicAICreature {
 	protected float _timeSinceLastStep = 0f;
 
 
-	void Update() {
-		if (_tileWereChasing != null) {
-			_timeSinceLastStep += Time.deltaTime;
-			Vector2 targetGlobalPos = Tile.toWorldCoord(_targetGridPos.x, _targetGridPos.y);
-			float distanceToTarget = Vector2.Distance(transform.position, targetGlobalPos);
-			if (distanceToTarget <= GRID_SNAP_THRESHOLD || _timeSinceLastStep >= 2f) {
-				takeStep();
-			}
-		}
-		else {
-			// Always lock to the position we're in when we're not chasing anything. 
-			_targetGridPos = toGridCoord(globalX, globalY);
+	public virtual void Update() {
+		_timeSinceLastStep += Time.deltaTime;
+		Vector2 targetGlobalPos = Tile.toWorldCoord(_targetGridPos.x, _targetGridPos.y);
+		float distanceToTarget = Vector2.Distance(transform.position, targetGlobalPos);
+		if (distanceToTarget <= GRID_SNAP_THRESHOLD || _timeSinceLastStep >= 2f) {
+			takeStep();
 		}
 		updateSpriteSorting();
 	}
 
 	protected override void takeStep() {
+
+		_takingCorrectingStep = false;
 		_timeSinceLastStep = 0f;
+
+		if (_tileWereChasing == null) {
+			_targetGridPos = toGridCoord(globalX, globalY);
+			return;
+		}
 
 		// First, figure out if the target is too far away
 		float distanceToTile = Vector2.Distance(transform.position, _tileWereChasing.transform.position);
@@ -117,22 +118,49 @@ public class apt283FollowEnemy : BasicAICreature {
 		// We do this when we need to correct where we think we are
 		// i.e. if we and another creature think we're both on the same gridpos, one of us needs to switch to a neighboring gridPos.
 		_timeSinceLastStep = 0f;
+		_takingCorrectingStep = true;
+	
+		_neighborPositions.Clear();
 
-		Vector2 targetWorldPos = toWorldCoord(_targetGridPos);
-		float xDistance = Mathf.Abs(targetWorldPos.x - transform.position.x);
-		float yDistance = Mathf.Abs(targetWorldPos.y - transform.position.y);
+		// Otherwise, we're going to look at all potential neighbors and then figure out the best one to go to.
+		Vector2 upGridNeighbor = new Vector2(_targetGridPos.x, _targetGridPos.y+1);
+		if (pathIsClear(toWorldCoord(upGridNeighbor), dontOverlapWalls)) {
+			_neighborPositions.Add(upGridNeighbor);
+		}
+		Vector2 upRightGridNeighbor = new Vector2(_targetGridPos.x+1, _targetGridPos.y+1);
+		if (pathIsClear(toWorldCoord(upRightGridNeighbor), dontOverlapWalls)) {
+			_neighborPositions.Add(upRightGridNeighbor);
+		}
+		Vector2 rightGridNeighbor = new Vector2(_targetGridPos.x+1, _targetGridPos.y);
+		if (pathIsClear(toWorldCoord(rightGridNeighbor), dontOverlapWalls)) {
+			_neighborPositions.Add(rightGridNeighbor);
+		}
+		Vector2 downRightGridNeighbor= new Vector2(_targetGridPos.x+1, _targetGridPos.y-1);
+		if (pathIsClear(toWorldCoord(downRightGridNeighbor), dontOverlapWalls)) {
+			_neighborPositions.Add(downRightGridNeighbor);
+		}
+		Vector2 downGridNeighbor = new Vector2(_targetGridPos.x, _targetGridPos.y-1);
+		if (pathIsClear(toWorldCoord(downGridNeighbor), dontOverlapWalls)) {
+			_neighborPositions.Add(downGridNeighbor);
+		}
+		Vector2 downLeftGridNeighbor= new Vector2(_targetGridPos.x-1, _targetGridPos.y-1);
+		if (pathIsClear(toWorldCoord(downLeftGridNeighbor), dontOverlapWalls)) {
+			_neighborPositions.Add(downLeftGridNeighbor);
+		}
+		Vector2 leftGridNeighbor = new Vector2(_targetGridPos.x-1, _targetGridPos.y);
+		if (pathIsClear(toWorldCoord(leftGridNeighbor), dontOverlapWalls)) {
+			_neighborPositions.Add(leftGridNeighbor);
+		}
+		Vector2 upLeftGridNeighbor= new Vector2(_targetGridPos.x-1, _targetGridPos.y+1);
+		if (pathIsClear(toWorldCoord(upLeftGridNeighbor), dontOverlapWalls)) {
+			_neighborPositions.Add(upLeftGridNeighbor);
+		}
 
-		if (transform.position.y > targetWorldPos.y && yDistance > xDistance) {
-			_targetGridPos += Vector2.up; // Correct upwards.
-		}
-		else if (transform.position.x > targetWorldPos.x && xDistance > yDistance) {
-			_targetGridPos += Vector2.right; // Correct to the right.
-		}
-		else if (transform.position.y < targetWorldPos.y && yDistance > xDistance) {
-			_targetGridPos -= Vector2.up; // Correct down.
+		if (_neighborPositions.Count > 0) {
+			_targetGridPos = GlobalFuncs.randElem(_neighborPositions);
 		}
 		else {
-			_targetGridPos -= Vector2.right; // Correct left.
+			_targetGridPos += Vector2.up;
 		}
 	}
 
@@ -142,15 +170,18 @@ public class apt283FollowEnemy : BasicAICreature {
 		Tile otherTile = collision.gameObject.GetComponent<Tile>();
 
 		// If we're chasing something, then take a step probably
-		if (otherTile != _tileWereChasing && _tileWereChasing != null
-			&& otherTile != null && otherTile.hasTag(TileTags.Creature)) {
+		if (otherTile != _tileWereChasing 
+			&& otherTile != null 
+			&& otherTile.hasTag(TileTags.Creature)) {
+
 			BasicAICreature maybeOtherCreature = (otherTile as BasicAICreature);
 			if (maybeOtherCreature != null
 				&& maybeOtherCreature.targetGridPos == _targetGridPos
-				&& transform.position.y < otherTile.transform.position.y) {
-				// We now have to take a correction step.
+				&& (!_takingCorrectingStep || maybeOtherCreature.takingCorrectingStep)) {
+				
 				takeCorrectionStep();
 			}
+
 		}
 
 		if (otherTile != null && otherTile.hasTag(tagsWeChase)) {
@@ -180,6 +211,14 @@ public class apt283FollowEnemy : BasicAICreature {
 			return true;
 		}
 		return DefaultCanOverlapFunc(hitResult);
+	}
+
+	protected bool dontOverlapWalls(RaycastHit2D hitResult) {
+		Tile maybeResultTile = hitResult.transform.GetComponent<Tile>();
+		if (maybeResultTile != null && maybeResultTile.hasTag(TileTags.Wall)) {
+			return false;
+		}
+		return true;
 	}
 
 }

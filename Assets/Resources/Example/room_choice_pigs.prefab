@@ -56,7 +56,7 @@ MonoBehaviour:
   localTilePrefabs: []
   roomGridX: 0
   roomGridY: 0
-  tilePrefab: {fileID: 1781302445510578, guid: cfd6546f3904642f1bbaddf9fe7ced93, type: 2}
+  tilePrefab: {fileID: 1781302445510578, guid: 16b0864b865574bc4a169084f3bf8cfc, type: 2}
   minNumTiles: 1
   maxNumTiles: 6
   borderWallProbability: 0.9

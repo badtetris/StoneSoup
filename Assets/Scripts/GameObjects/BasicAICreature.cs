@@ -17,6 +17,11 @@ public class BasicAICreature : Tile {
 		get { return _targetGridPos; }
 	}
 
+	protected bool _takingCorrectingStep = false;
+	public bool takingCorrectingStep {
+		get { return _takingCorrectingStep; }
+	}
+
 
 	// We move similar to how the player moves, so we keep similar tunable values.
 	public float moveSpeed = 5;

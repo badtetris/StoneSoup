@@ -57,7 +57,7 @@ MonoBehaviour:
   roomGridX: 0
   roomGridY: 0
   rockPrefab: {fileID: 1387771116485768, guid: e4d00d2fcd2614042856187fc264cd0d, type: 2}
-  enemyPrefab: {fileID: 1781302445510578, guid: 16b0864b865574bc4a169084f3bf8cfc,
+  enemyPrefab: {fileID: 1097009321995878, guid: 7f119146519d742d7953341b07580643,
     type: 2}
   minNumRocks: 2
   maxNumRocks: 4
