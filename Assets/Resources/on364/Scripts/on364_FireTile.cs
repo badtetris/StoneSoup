@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class on364_FireTile : Tile {
-    public float explodeWhen = 2f;
+    public float explodeWhen = .1f;
     public bool triggered = false;
+	public SpriteRenderer thisSprRen;
 
     public GameObject Explosion;
 
@@ -17,6 +18,7 @@ public class on364_FireTile : Tile {
         if (explodeWhen <= 0f)
         {
             GameObject boom = Instantiate(Explosion, transform.position, Quaternion.identity);
+			triggered = !triggered;
         }
     }
 
@@ -27,6 +29,7 @@ public class on364_FireTile : Tile {
         {
             if (!triggered)
             {
+				thisSprRen.enabled = true;
                 triggered = true;
             }
         }

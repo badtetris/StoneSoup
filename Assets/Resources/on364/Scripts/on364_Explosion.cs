@@ -13,8 +13,8 @@ public class on364_Explosion : Tile {
 	
 	// Update is called once per frame
 	void Update () {
-		if (size == 5) {
-			Collider2D[] dmgObjs = Physics2D.OverlapCircleAll(transform.position, 15);
+		if (size >= 5) {
+			Collider2D[] dmgObjs = Physics2D.OverlapCircleAll(transform.position, 3.5f);
 			foreach (Collider2D hitObj in dmgObjs) {
 				Tile tile = hitObj.GetComponent<Tile>();
 				if (tile == this) {
@@ -24,15 +24,16 @@ public class on364_Explosion : Tile {
 					tile.takeDamage(this, 2, DamageType.Explosive);
 				}
 			}
+			Destroy (this.gameObject);
 		}
 		if (timePassed > 0) 
 		{
 			timePassed -= Time.deltaTime;
-		} 
+		}
 		else 
 		{
 			transform.localScale += new Vector3 (5, 5, 0);
-			timePassed = .1f;
+			//timePassed = .1f;
 			size++;
 		}
 	}

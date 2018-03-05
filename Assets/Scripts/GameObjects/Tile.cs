@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,7 +19,12 @@ public enum TileTags {
 	Consumable = 0x100,
 	Wearable = 0x200,
 	Money = 0x400,
-	Dateable = 0x800
+	Dateable = 0x800,
+	Dirt = 0x1000,
+	Water = 0x2000,
+	Plant = 0x4000,
+	Flammable = 0x8000,
+	Merchant = 0x10000
 }
 
 // The two damage types available to us.
@@ -55,6 +60,7 @@ public class Tile : MonoBehaviour {
 
 	// ALL tiles have health, when they run out, they die.
 	public int health = 1;
+	protected int _startHealth;
 
 	// If you define a death effect for a tile, it'll be spawned when the tile dies.
 	public GameObject deathEffect;
@@ -106,17 +112,23 @@ public class Tile : MonoBehaviour {
 	// Common Unity components that tiles might have.
 	// If the tile has the component when init is called, these variables will fill with the appropriate values.
 	protected Rigidbody2D _body;
+	public virtual Rigidbody2D body {
+		get { return _body; }
+	}
 	protected SpriteRenderer _sprite;
-	public SpriteRenderer sprite {
+	public virtual SpriteRenderer sprite {
 		get { return _sprite; }
 	}
 	protected Animator _anim;
 	protected Collider2D _collider;
+	public virtual Collider2D mainCollider {
+		get { return _collider; }
+	}
 
 	/////////////////////////////////
 
 
-	
+
 	// Now for protected properties used by many tiles.
 
 	// It's common for tiles to use the Rigidbody2D.Cast function to check for nearby tiles.
@@ -179,8 +191,8 @@ public class Tile : MonoBehaviour {
 
 	// The method used to move other tiles.
 	public void addForce(Vector2 force) {
-		if (_body != null) {
-			_body.AddForce(force);
+		if (body != null) {
+			body.AddForce(force);
 		}
 	}
 
@@ -203,6 +215,7 @@ public class Tile : MonoBehaviour {
 			_body = GetComponent<Rigidbody2D>();
 		}
 		_collider = GetComponent<Collider2D>();
+		_startHealth = health;
 	}
 
 	protected virtual void updateSpriteSorting() {
@@ -240,6 +253,10 @@ public class Tile : MonoBehaviour {
 		if (health <= 0) {
 			die();
 		}
+	}
+
+	public virtual void restoreAllHealth() {
+		health = _startHealth;
 	}
 
 	// The function that's called when a tile dies.
@@ -324,7 +341,7 @@ public class Tile : MonoBehaviour {
 
 	// Similarly, when we can no longer detect a tile. 
 	public virtual void tileNoLongerDetected(Tile detectedTile) {
-		
+
 	}
 
 
@@ -397,6 +414,21 @@ public class Tile : MonoBehaviour {
 		}
 		return maxContactImpact;
 	}
+
+
+	// This function will look for a tile type at a specific point and return the first version it finds
+	// Returns null if it can't find one
+	public static Tile tileAtPoint(Vector2 point, TileTags testTags) {
+		int numObjects = Physics2D.OverlapPointNonAlloc(point, _maybeColliderResults);
+		for (int i = 0; i < numObjects && i < _maybeColliderResults.Length; i++) {
+			Tile maybeTile = _maybeColliderResults[i].GetComponent<Tile>();
+			if (maybeTile != null && maybeTile.hasTag(testTags)) {
+				return maybeTile;
+			}
+		}
+		return null;
+	}
+
 
 	// Delegate types used for pathfinding (basic or otherwise)
 	public delegate bool CanOverlapFunc(RaycastHit2D hitResult);
@@ -488,7 +520,7 @@ public class Tile : MonoBehaviour {
 		return tile;
 	}
 
-	
+
 
 }
 
