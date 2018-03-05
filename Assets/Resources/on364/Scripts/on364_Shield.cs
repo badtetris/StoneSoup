@@ -49,11 +49,17 @@ public class on364_Shield : Tile {
 	}
 
 
-	// Update is called once per frame
-	void FixedUpdate () {
-		if (cooldownTimer > 0) {
-			cooldownTimer -= Time.deltaTime;
-		}
+    // Update is called once per frame
+    void Update()
+    {
+        if (cooldownTimer > 0)
+        {
+            cooldownTimer -= Time.deltaTime;
+        }
+    }
+
+    void FixedUpdate () {
+		
 		if (_tileHoldingUs != null) {
 			float aimLoc = Mathf.Atan2 (_tileHoldingUs.aimDirection.y, _tileHoldingUs.aimDirection.x) * Mathf.Rad2Deg;
 			_body.MoveRotation (aimLoc);

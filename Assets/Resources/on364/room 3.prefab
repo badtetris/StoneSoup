@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4262138082412112}
   - component: {fileID: 114841005544316094}
   m_Layer: 0
-  m_Name: room 1
+  m_Name: room 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52,8 +52,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomAuthor: on364
-  designedRoomFile: {fileID: 4900000, guid: c067001c9d6271142ac515640154d2a0, type: 3}
+  designedRoomFile: {fileID: 4900000, guid: a63debfa2f2a3204899be0d96f82f8b9, type: 3}
   localTilePrefabs:
-  - {fileID: 1233210222912648, guid: f47d1eb5e65cc1a4e9280fb013a454e3, type: 2}
+  - {fileID: 1178489064218738, guid: 903d273aa820cca44a3bedfa1f3e65b2, type: 2}
   roomGridX: 0
   roomGridY: 0
