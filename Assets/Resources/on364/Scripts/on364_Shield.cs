@@ -70,7 +70,7 @@ public class on364_Shield : Tile {
 		if (cooldownTimer > 0) {
 			return;
 		}
-		_tileHoldingUs.addForce (tileUsingUs.aimDirection.normalized * 10);
-		cooldownTimer = 3.0f;
+		_tileHoldingUs.addForce (tileUsingUs.aimDirection.normalized * 2500);
+		cooldownTimer = 2.0f;
 	}
 }
