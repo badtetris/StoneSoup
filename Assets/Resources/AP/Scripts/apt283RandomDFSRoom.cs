@@ -28,7 +28,7 @@ public class apt283RandomDFSRoom : Room {
 
 	protected static List<Vector2> _neighbors = new List<Vector2>(4);
 
-	public override void fillRoom(LevelGenerator ourGenerator, params Dir[] requiredExits) {
+    public override void fillRoom(LevelGenerator ourGenerator, ExitConstraint requiredExits) {
 		
 		bool[,] wallMap = new bool[LevelGenerator.ROOM_WIDTH, LevelGenerator.ROOM_HEIGHT];
 
@@ -39,23 +39,20 @@ public class apt283RandomDFSRoom : Room {
 			}
 		}
 
-		foreach (Dir exit in requiredExits) {
-			Vector2 exitLocation = getCoordinateFromExit(exit);
-			wallMap[(int)exitLocation.x, (int)exitLocation.y] = false;
+        bool foundStartPos = false;
+        Vector2 startPos = new Vector2(Random.Range(0, LevelGenerator.ROOM_WIDTH), Random.Range(0, LevelGenerator.ROOM_HEIGHT));
+
+        foreach (Vector2Int exitLocation in requiredExits.requiredExitLocations()) {
+			wallMap[exitLocation.x, exitLocation.y] = false;
+            if (!foundStartPos) {
+                startPos = exitLocation;
+                foundStartPos = true;
+            }
 		}
 
 		_agenda.Clear();
 		_closed.Clear();
-
-
-
-		Vector2 startPos = new Vector2(Random.Range(0, LevelGenerator.ROOM_WIDTH), Random.Range(0, LevelGenerator.ROOM_HEIGHT));
-		if (requiredExits.Length > 0) {
-			startPos = getCoordinateFromExit(requiredExits[0]);
-		}
-
-		//Vector2 targetPos = getCoordinateFromExit(exit);
-
+        
 		SearchVertex startVertex = new SearchVertex();
 		startVertex.gridPos = startPos;
 		startVertex.parent = null;
@@ -65,32 +62,33 @@ public class apt283RandomDFSRoom : Room {
 		while (_agenda.Count > 0) {
 			SearchVertex currentVertex = _agenda[_agenda.Count-1];
 			_agenda.RemoveAt(_agenda.Count-1);
+            if (listContainsVertex(_closed, currentVertex.gridPos)) {
+                continue;
+            }
+
+
 			_closed.Add(currentVertex);
 
 			_neighbors.Clear();
 
 			Vector2 neighborPos = currentVertex.gridPos + Vector2.up*2;
 			if (inGrid(neighborPos)
-				&& !listContainsVertex(_closed, neighborPos)
-				&& !listContainsVertex(_agenda, neighborPos)) {
+				&& !listContainsVertex(_closed, neighborPos)) {
 				_neighbors.Add(neighborPos);
 			}
 			neighborPos = currentVertex.gridPos + Vector2.right*2;
 			if (inGrid(neighborPos)
-				&& !listContainsVertex(_closed, neighborPos)
-				&& !listContainsVertex(_agenda, neighborPos)) {
+				&& !listContainsVertex(_closed, neighborPos)) {
 				_neighbors.Add(neighborPos);
 			}
 			neighborPos = currentVertex.gridPos - Vector2.up*2;
 			if (inGrid(neighborPos)
-				&& !listContainsVertex(_closed, neighborPos)
-				&& !listContainsVertex(_agenda, neighborPos)) {
+				&& !listContainsVertex(_closed, neighborPos)) {
 				_neighbors.Add(neighborPos);
 			}
 			neighborPos = currentVertex.gridPos - Vector2.right*2;
 			if (inGrid(neighborPos)
-				&& !listContainsVertex(_closed, neighborPos)
-				&& !listContainsVertex(_agenda, neighborPos)) {
+				&& !listContainsVertex(_closed, neighborPos)) {
 				_neighbors.Add(neighborPos);
 			}
 

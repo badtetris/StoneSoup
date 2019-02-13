@@ -179,16 +179,20 @@ public class LevelGenerator : MonoBehaviour {
 			}
 
 			Room room = null;
-
+            ExitConstraint requiredExits = new ExitConstraint();
 			if (roomToSpawn == startRoomPrefab) {
-				room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, exitDir);
+                requiredExits.addDirConstraint(exitDir);
+                room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, requiredExits);
 				GameManager.instance.currentRoom = room;
 			}
 			else if (!makingCriticalPath) {
-				room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, entranceDir);
+                requiredExits.addDirConstraint(entranceDir);
+                room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, requiredExits);
 			}
 			else {
-				room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, entranceDir, exitDir);
+                requiredExits.addDirConstraint(entranceDir);
+                requiredExits.addDirConstraint(exitDir);
+                room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, requiredExits);
 			}
 
 			roomGrid[currentRoomX, currentRoomY] = room;
@@ -202,7 +206,7 @@ public class LevelGenerator : MonoBehaviour {
 		for (int x = 0; x < numXRooms; x++) {
 			for (int y = 0; y < numYRooms; y++) {
 				if (roomGrid[x, y] == null) {
-					roomGrid[x, y] = Room.generateRoom(nextRoomToSpawn(), this, x, y);
+                    roomGrid[x, y] = Room.generateRoom(nextRoomToSpawn(), this, x, y, ExitConstraint.None);
 				}
 				float roomLeftX = totalRoomWidth*x-Tile.TILE_SIZE/2;
 				float roomRightX = totalRoomWidth*(x+1)+Tile.TILE_SIZE/2;
@@ -392,16 +396,20 @@ public class LevelGenerator : MonoBehaviour {
 			}
 
 			Room room = null;
-
+            ExitConstraint requiredExits = new ExitConstraint();
 			if (roomToSpawn == startRoomPrefab) {
-				room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, exitDir);
+                requiredExits.addDirConstraint(exitDir);
+                room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, requiredExits);
 				GameManager.instance.currentRoom = room;
 			}
 			else if (!makingCriticalPath) {
-				room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, entranceDir);
+                requiredExits.addDirConstraint(entranceDir);
+                room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, requiredExits);
 			}
 			else {
-				room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, entranceDir, exitDir);
+                requiredExits.addDirConstraint(entranceDir);
+                requiredExits.addDirConstraint(exitDir);
+                room = Room.generateRoom(roomToSpawn, this, currentRoomX, currentRoomY, requiredExits);
 			}
 
 
@@ -416,7 +424,7 @@ public class LevelGenerator : MonoBehaviour {
 		for (int x = 0; x < numXRooms; x++) {
 			for (int y = 0; y < numYRooms; y++) {
 				if (roomGrid[x, y] == null) {
-					roomGrid[x, y] = Room.generateRoom(nextRoomToSpawn(), this, x, y);
+                    roomGrid[x, y] = Room.generateRoom(nextRoomToSpawn(), this, x, y, ExitConstraint.None);
 				}
 				if (roomGrid[x, y] != GameManager.instance.currentRoom) {
 					roomGrid[x, y].gameObject.SetActive(false);

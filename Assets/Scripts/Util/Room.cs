@@ -10,7 +10,7 @@ public class Room : MonoBehaviour {
 
 	// This is the function used by the level generator to generate the whole room. 
 	// It makes use of the "createRoom" and "fillRoom" functions to decide what sort of room to create and also how to fill it
-	public static Room generateRoom(GameObject roomPrefab, LevelGenerator ourGenerator, int roomX, int roomY, params Dir[] requiredExits) {
+	public static Room generateRoom(GameObject roomPrefab, LevelGenerator ourGenerator, int roomX, int roomY, ExitConstraint requiredExits) {
 		Room newRoom = roomPrefab.GetComponent<Room>().createRoom(requiredExits);
 
 		float totalRoomWidth = Tile.TILE_SIZE*LevelGenerator.ROOM_WIDTH;
@@ -60,7 +60,7 @@ public class Room : MonoBehaviour {
 	// just instantiate the provided room prefab. 
 	// The reason is we sometimes want to make a room that instantiates OTHER room prefabs 
 	// For example, a room might want to randomly select from other rooms when generating.
-	public virtual Room createRoom(params Dir[] requiredExits) {
+	public virtual Room createRoom(ExitConstraint requiredExits) {
 		GameObject roomObj = Instantiate(gameObject);
 		return roomObj.GetComponent<Room>();
 	}
@@ -71,7 +71,7 @@ public class Room : MonoBehaviour {
 	// For an exit to "exist", there can't be a wall in the center part of that edge of the room.
 
 	// This implementation pulls a designed room out of a text file.
-	public virtual void fillRoom(LevelGenerator ourGenerator, params Dir[] requiredExits) {
+    public virtual void fillRoom(LevelGenerator ourGenerator, ExitConstraint requiredExits) {
 
 		string initialGridString = designedRoomFile.text;
 		string[] rows = initialGridString.Trim().Split('\n');

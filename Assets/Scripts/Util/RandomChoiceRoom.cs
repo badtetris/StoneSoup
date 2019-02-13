@@ -9,7 +9,7 @@ public class RandomChoiceRoom : Room {
 
 	public GameObject[] roomChoices;
 
-	public override Room createRoom(params Dir[] requiredExits) {
+	public override Room createRoom(ExitConstraint requiredExits) {
 		GameObject roomPrefab = GlobalFuncs.randElem(roomChoices);
 		return roomPrefab.GetComponent<Room>().createRoom(requiredExits);
 	}

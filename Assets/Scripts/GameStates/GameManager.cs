@@ -98,19 +98,19 @@ public class GameManager : MonoBehaviour {
 			int roomGridHeight = roomGrid.GetLength(1);
 
 			// Check if the player's gone up a room
-			if (player.localY > LevelGenerator.ROOM_HEIGHT*Tile.TILE_SIZE + Tile.TILE_SIZE/2f
+			if (player.localY > LevelGenerator.ROOM_HEIGHT*Tile.TILE_SIZE + 3*Tile.TILE_SIZE/4f
 				&& currentRoom.roomGridY < roomGridHeight-1) {
 				maybeRoomToMoveTo = roomGrid[currentRoom.roomGridX, currentRoom.roomGridY+1];
 			}
-			else if (player.localX > LevelGenerator.ROOM_WIDTH*Tile.TILE_SIZE + Tile.TILE_SIZE/2f
+			else if (player.localX > LevelGenerator.ROOM_WIDTH*Tile.TILE_SIZE + 3*Tile.TILE_SIZE/4f
 				&& currentRoom.roomGridX < roomGridWidth-1) {
 				maybeRoomToMoveTo = roomGrid[currentRoom.roomGridX+1, currentRoom.roomGridY];
 			}
-			else if (player.localY < -Tile.TILE_SIZE/2f
+			else if (player.localY < -3*Tile.TILE_SIZE/4f
 				&& currentRoom.roomGridY > 0) {
 				maybeRoomToMoveTo = roomGrid[currentRoom.roomGridX, currentRoom.roomGridY-1];
 			}
-			else if (player.localX < -Tile.TILE_SIZE/2f
+			else if (player.localX < -3*Tile.TILE_SIZE/4f
 				&& currentRoom.roomGridX > 0) {
 				maybeRoomToMoveTo = roomGrid[currentRoom.roomGridX-1, currentRoom.roomGridY];
 			}

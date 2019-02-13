@@ -8,7 +8,7 @@ public class apt283ArrowTrapDFSRoom : apt283RandomDFSRoom {
 	public GameObject faceRightArrowTrapPrefab;
 
 
-	public override void fillRoom(LevelGenerator ourGenerator, params Dir[] requiredExits) {
+    public override void fillRoom(LevelGenerator ourGenerator, ExitConstraint requiredExits) {
 		base.fillRoom(ourGenerator, requiredExits);
 		foreach (SearchVertex vertex in _closed) {
 			// Only look at vertices that were dead ends and weren't neighboring the exits.
@@ -17,8 +17,7 @@ public class apt283ArrowTrapDFSRoom : apt283RandomDFSRoom {
 			}
 
 			bool closeToExit = false;
-			foreach (Dir exitDir in requiredExits) {
-				Vector2 exitPoint = getCoordinateFromExit(exitDir);
+			foreach (Vector2Int exitPoint in requiredExits.requiredExitLocations()) {
 				int manDistanceToExit = (int)Mathf.Abs(exitPoint.x-vertex.gridPos.x)+(int)Mathf.Abs(exitPoint.y-vertex.gridPos.y);
 				if (manDistanceToExit <= 1) {
 					closeToExit = true;

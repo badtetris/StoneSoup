@@ -18,6 +18,7 @@ public class apt283ExplosiveRock : apt283Rock {
 		_pulseEffect = GetComponentInChildren<apt283PulseEffect>();
 		if (startsInAir) {
 			_isInAir = true;
+            _afterThrowCounter = afterThrowTime;
 		}
 	}
 

@@ -14,7 +14,7 @@ public class apt283GeometricRoom : Room {
 
 	protected string saveFilePrefix = "/Resources/Class6/Rooms/generated_room_1_";
 
-	public override void fillRoom(LevelGenerator ourGenerator, params Dir[] requiredExits) {
+	public override void fillRoom(LevelGenerator ourGenerator, ExitConstraint requiredExits) {
 
 		_wallMap = new bool[LevelGenerator.ROOM_WIDTH, LevelGenerator.ROOM_HEIGHT];
 		for (int x = 0; x < LevelGenerator.ROOM_WIDTH; x++) {

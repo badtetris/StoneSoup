@@ -18,7 +18,7 @@ public class apt283Room : Room {
 	public float borderWallProbability = 0.7f;
 
 
-	public override void fillRoom(LevelGenerator ourGenerator, params Dir[] requiredExits) {
+    public override void fillRoom(LevelGenerator ourGenerator, ExitConstraint requiredExits) {
 		// It's very likely you'll want to do different generation methods depending on which required exits you receive
 		// Here's an example of randomly choosing between two generation methods.
 		if (Random.value <= 0.5f) {
@@ -30,12 +30,12 @@ public class apt283Room : Room {
 
 	}
 
-	protected void roomGenerationVersionOne(LevelGenerator ourGenerator, Dir[] requiredExits) {
+	protected void roomGenerationVersionOne(LevelGenerator ourGenerator, ExitConstraint requiredExits) {
 		// In this version of room generation, I only generate the walls.
 		generateWalls(ourGenerator, requiredExits);
 	}
 
-	protected void roomGenerationVersionTwo(LevelGenerator ourGenerator, Dir[] requiredExits) {
+	protected void roomGenerationVersionTwo(LevelGenerator ourGenerator, ExitConstraint requiredExits) {
 		// In this version of room generation, I generate walls and then other stuff.
 		generateWalls(ourGenerator, requiredExits);
 		// Inside the borders I make some rocks and enemies.
@@ -98,7 +98,7 @@ public class apt283Room : Room {
 
 
 
-	protected void generateWalls(LevelGenerator ourGenerator, Dir[] requiredExits) {
+	protected void generateWalls(LevelGenerator ourGenerator, ExitConstraint requiredExits) {
 		// Basically we go over the border and determining where to spawn walls.
 		bool[,] wallMap = new bool[LevelGenerator.ROOM_WIDTH, LevelGenerator.ROOM_HEIGHT];
 		for (int x = 0; x < LevelGenerator.ROOM_WIDTH; x++) {
@@ -108,22 +108,22 @@ public class apt283Room : Room {
 					
 					if (x == LevelGenerator.ROOM_WIDTH/2 
 						&& y == LevelGenerator.ROOM_HEIGHT-1
-						&& containsDir(requiredExits, Dir.Up)) {
+                        && requiredExits.upExitRequired) {
 						wallMap[x, y] = false;
 					}
 					else if (x == LevelGenerator.ROOM_WIDTH-1
-						&& y == LevelGenerator.ROOM_HEIGHT/2
-						&& containsDir(requiredExits, Dir.Right)) {
+						     && y == LevelGenerator.ROOM_HEIGHT/2
+                             && requiredExits.rightExitRequired) {
 						wallMap[x, y] = false;
 					}
 					else if (x == LevelGenerator.ROOM_WIDTH/2
-						&& y == 0
-						&& containsDir(requiredExits, Dir.Down)) {
+						     && y == 0
+                             && requiredExits.downExitRequired) {
 						wallMap[x, y] = false;
 					}
 					else if (x == 0 
-						&& y == LevelGenerator.ROOM_HEIGHT/2 
-						&& containsDir(requiredExits, Dir.Left)) {
+						     && y == LevelGenerator.ROOM_HEIGHT/2 
+                             && requiredExits.leftExitRequired) {
 						wallMap[x, y] = false;
 					}
 					else {
