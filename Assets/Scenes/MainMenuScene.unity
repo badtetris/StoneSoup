@@ -863,7 +863,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: NYU Stone Soup 2018
+  m_Text: NYU Stone Soup 2019
 --- !u!222 &958143156
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1163,6 +1163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allContributorIDs:
   - AP
+  - Example
 --- !u!4 &1420620112
 Transform:
   m_ObjectHideFlags: 0
